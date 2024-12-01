@@ -2,14 +2,14 @@ package puzzles
 
 import (
 	"regexp"
-	"sort"
+	"slices"
 	"strconv"
 	"strings"
 )
 
 // Day 1: Historian Hysteria
 // https://adventofcode.com/2024/day/1
-func DayOne(input string) int {
+func DayOne(input string) (int, int) {
 	var left, right []int
 
 	// Parse both lists into separate integer slices.
@@ -35,8 +35,8 @@ func DayOne(input string) int {
 	}
 
 	// Sort both lists in ascending order.
-	sort.Ints(left)
-	sort.Ints(right)
+	slices.Sort(left)
+	slices.Sort(right)
 
 	// Calculate the total distance between the two lists.
 	distance := 0
@@ -48,5 +48,22 @@ func DayOne(input string) int {
 		distance += d
 	}
 
-	return distance
+	// Calculate the similarity between the two lists.
+	similarity := 0
+	for _, id := range left {
+		position, appears := slices.BinarySearch(right, id)
+		if appears {
+			c := 0
+			for i := position; i < len(right); i++ {
+				if right[i] != id {
+					break
+				}
+
+				c++
+			}
+			similarity += id * c
+		}
+	}
+
+	return distance, similarity
 }

@@ -12,6 +12,6 @@ func main() {
 		panic(error)
 	}
 
-	result := puzzles.DayOne(string(data))
-	fmt.Println(result)
+	one, two := puzzles.DayOne(string(data))
+	fmt.Printf("Day 1, part 1 (distance): %d, part 2 (similarity): %d\n", one, two)
 }

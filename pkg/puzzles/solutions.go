@@ -9,6 +9,8 @@ func Solve(day int, input string) (int, int) {
 	switch day {
 	case 1:
 		return dayOne(input)
+	case 2:
+		return dayTwo(input)
 	}
 	return 0, 0
 }

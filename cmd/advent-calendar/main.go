@@ -7,11 +7,15 @@ import (
 )
 
 func main() {
-	data, error := os.ReadFile("infiles/1.txt")
-	if error != nil {
-		panic(error)
-	}
+	solved := 1
+	for day := 1; day <= solved; day++ {
+		filename := fmt.Sprintf("infiles/%d.txt", day)
+		data, error := os.ReadFile(filename)
+		if error != nil {
+			panic(error)
+		}
 
-	one, two := puzzles.DayOne(string(data))
-	fmt.Printf("Day 1, part 1 (distance): %d, part 2 (similarity): %d\n", one, two)
+		one, two := puzzles.Solve(day, string(data))
+		fmt.Printf("Day %v: %d, %d\n", day, one, two)
+	}
 }

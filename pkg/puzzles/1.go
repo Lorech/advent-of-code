@@ -9,7 +9,7 @@ import (
 
 // Day 1: Historian Hysteria
 // https://adventofcode.com/2024/day/1
-func DayOne(input string) (int, int) {
+func dayOne(input string) (int, int) {
 	var left, right []int
 
 	// Parse both lists into separate integer slices.

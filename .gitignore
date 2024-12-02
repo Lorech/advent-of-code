@@ -1,2 +1,5 @@
+# Input files, ignored as per wishes of the author.
+/infiles
+
 # Misc.
 .DS_Store

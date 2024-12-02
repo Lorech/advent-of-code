@@ -12,8 +12,24 @@ func TestDayTwo(t *testing.T) {
 1 3 6 7 9`
 
 	eSafe := 2
+	eActuallySafe := 4
 
-	if rSafe, _ := DayTwo(input); eSafe != rSafe {
-		t.Errorf("DayTwo() = %v, %v, want %v, %v", rSafe, 0, eSafe, 0)
+	if rSafe, rActuallySafe := dayTwo(input); eSafe != rSafe || eActuallySafe != rActuallySafe {
+		t.Errorf("DayTwo() = %v, %v, want %v, %v", rSafe, rActuallySafe, eSafe, eActuallySafe)
+	}
+}
+
+// Tests a few edge cases that helped narrow down the solution for part 2.
+func TestDayOneEdgeCases(t *testing.T) {
+	input := `9 1 2 3 4
+1 2 3 4 9
+2 1 3 5 8
+2 6 1`
+
+	eSafe := 0
+	eActuallySafe := 4
+
+	if rSafe, rActuallySafe := dayTwo(input); eSafe != rSafe || eActuallySafe != rActuallySafe {
+		t.Errorf("DayTwo() = %v, %v, want %v, %v", rSafe, rActuallySafe, eSafe, eActuallySafe)
 	}
 }

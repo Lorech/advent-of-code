@@ -10,6 +10,7 @@ import (
 func dayTwo(input string) (int, int) {
 	reports := strings.Split(input, "\n")
 	safe := 0
+	dampened := 0
 
 	for _, report := range reports {
 		// Parse the report into a slice of integers.
@@ -23,28 +24,74 @@ func dayTwo(input string) (int, int) {
 			continue
 		}
 
-		// Keep track of orientation for the report.
-		incrementing := levels[0] < levels[1]
-
 		// Validate the report.
-		for i := 0; i < len(levels); i++ {
-			// We made it to the end! We're safe!
-			if i == len(levels)-1 {
-				safe++
-				break
-			}
+		isSafe, isActuallySafe := validateReport(levels, false)
+		if isSafe {
+			safe++
+		} else if isActuallySafe {
+			dampened++
+		}
+	}
 
-			// Difference must be in range [1,3], otherwise, this is unsafe.
-			if difference := levels[i+1] - levels[i]; difference == 0 || max(difference, -difference) > 3 {
-				break
-			}
+	return safe, safe + dampened
+}
 
-			// Every level must be either incrementing or decrementing, otherwise, this is unsafe.
-			if incrementing && levels[i] > levels[i+1] || !incrementing && levels[i] < levels[i+1] {
-				break
+// Validates a single report.
+//
+// Returns a tuple of two booleans:
+//   - The first boolean indicates whether the report is safe.
+//   - The second boolean indicates whether the report is actually safe when
+//     taking dampening into account.
+func validateReport(levels []int, dampened bool) (bool, bool) {
+	// Keep track of orientation for the report.
+	incrementing := levels[0] < levels[1]
+
+	for i := 0; i < len(levels); i++ {
+		// Skip the last level - since we're comparing with the next level, getting to
+		// the last level without an early exit implies that the report is safe.
+		if i == len(levels)-1 {
+			break
+		}
+
+		// Difference must be in range [1,3], otherwise this is unsafe unless dampened.
+		if difference := levels[i] - levels[i+1]; difference == 0 || max(difference, -difference) > 3 {
+			if dampened {
+				return false, false
+			} else {
+				// FIXME: Brute force approach to validating dampening. I should do better!
+				_, prev := validateReport(remove(levels, i-1), true)
+				_, curr := validateReport(remove(levels, i), true)
+				_, next := validateReport(remove(levels, i+1), true)
+				return false, prev || curr || next
+			}
+		}
+
+		// Every level must be either incrementing or decrementing, otherwise this is unsafe unless dampened.
+		if incrementing && levels[i] > levels[i+1] || !incrementing && levels[i] < levels[i+1] {
+			if dampened {
+				return false, false
+			} else {
+				// FIXME: Brute force approach to validating dampening. I should do better!
+				_, prev := validateReport(remove(levels, i-1), true)
+				_, curr := validateReport(remove(levels, i), true)
+				_, next := validateReport(remove(levels, i+1), true)
+				return false, prev || curr || next
 			}
 		}
 	}
 
-	return safe, 0
+	return !dampened, dampened
+}
+
+// Remove an element from a slice by index.
+//
+// If the index is out of bounds, the original slice is returned.
+//
+// NOTE: This looks like a useful function to extract into a utility.
+func remove(slice []int, index int) []int {
+	if index < 0 || index >= len(slice) {
+		return slice
+	}
+	result := append([]int{}, slice...) // Copy the slice to avoid modifying the original.
+	return append(result[:index], result[index+1:]...)
 }

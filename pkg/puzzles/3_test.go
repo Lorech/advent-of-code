@@ -2,13 +2,20 @@ package puzzles
 
 import "testing"
 
-// Tests the full solution for day 3 based on the provided example.
-func TestDayThree(t *testing.T) {
-	input := `xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))`
+var inputDayThree string = `xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))`
 
-	eResult := 161
+// Tests the first part of the puzzle for day 3.
+func TestDayThreePartOne(t *testing.T) {
+	e := 161
+	if r := d3p1(inputDayThree); e != r {
+		t.Errorf("d3p1() = %v, expected %v", r, e)
+	}
+}
 
-	if rResult, _ := dayThree(input); eResult != rResult {
-		t.Errorf("DayThree() = %v, %v, want %v, %v", rResult, 0, eResult, 0)
+// Tests the second part of the puzzle for day 3.
+func TestDayThreePartTwo(t *testing.T) {
+	e := 48
+	if r := d3p2(inputDayThree); e != r {
+		t.Errorf("d3p2() = %v, expected %v", r, e)
 	}
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	solved := 2
+	solved := 3
 	for day := 1; day <= solved; day++ {
 		filename := fmt.Sprintf("infiles/%d.txt", day)
 		data, error := os.ReadFile(filename)

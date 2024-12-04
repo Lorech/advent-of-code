@@ -25,10 +25,13 @@ func d4p1(input string) int {
 			}
 
 			// Initialize a 7x7 grid of zeroes to perform lookups within.
-			grid := [7][7]byte{}
+			grid := make([][]byte, 7)
 
 			// Fill the valid grid postions with the values from the input.
 			for gy := range 7 {
+				// Allocate memory for the row.
+				grid[gy] = make([]byte, 7)
+
 				dy := gy - 3
 
 				// y is out of bounds - leave it as a 0.
@@ -48,7 +51,7 @@ func d4p1(input string) int {
 				}
 			}
 
-			words += lookup(grid)
+			words += lookup(grid, "XMAS")
 		}
 	}
 
@@ -57,45 +60,51 @@ func d4p1(input string) int {
 
 // Performs omnidirectional lookup for the keyword within a sub-grid.
 //
-// Based on the requirements of the challenge, it is expected that the grid is
-// 7x7 tiles large, centered around the first character of the keyword.
+// It is assumed that the sub-grid is an odd-length, square 2D slice, with its'
+// center being the first symbol of the keyword.
 //
 // Returns the number of times the keyword was found within the grid.
-func lookup(grid [7][7]byte) int {
+func lookup(grid [][]byte, keyword string) int {
+	center := (len(grid) - 1) / 2
 	result := 0
 
-	// right
-	if grid[3][3] == 'X' && grid[3][4] == 'M' && grid[3][5] == 'A' && grid[3][6] == 'S' {
-		result++
+	// Allocate memory for storing the word in all 8 directions.
+	words := make([][]byte, 8)
+	for i := range 8 {
+		words[i] = make([]byte, len(keyword))
 	}
-	// bottom-right
-	if grid[3][3] == 'X' && grid[4][4] == 'M' && grid[5][5] == 'A' && grid[6][6] == 'S' {
-		result++
+
+	// Get the word in all 8 directions around the central letter within the grid.
+	directions := [3]int{-1, 0, 1}
+	for y := range 3 {
+		for x := range 3 {
+			// Skip an offset of 0,0, as that will just repeatedly get one letter.
+			if x == 1 && y == 1 {
+				continue
+			}
+			for offset := range len(keyword) {
+				words[y*3+x-B2i(y == 2 || y == 1 && x > 0)][offset] = grid[center+offset*directions[y]][center+offset*directions[x]]
+			}
+		}
 	}
-	// bottom
-	if grid[3][3] == 'X' && grid[4][3] == 'M' && grid[5][3] == 'A' && grid[6][3] == 'S' {
-		result++
-	}
-	// bottom-left
-	if grid[3][3] == 'X' && grid[4][2] == 'M' && grid[5][1] == 'A' && grid[6][0] == 'S' {
-		result++
-	}
-	// left
-	if grid[3][3] == 'X' && grid[3][2] == 'M' && grid[3][1] == 'A' && grid[3][0] == 'S' {
-		result++
-	}
-	// top-left
-	if grid[3][3] == 'X' && grid[2][2] == 'M' && grid[1][1] == 'A' && grid[0][0] == 'S' {
-		result++
-	}
-	// top
-	if grid[3][3] == 'X' && grid[2][3] == 'M' && grid[1][3] == 'A' && grid[0][3] == 'S' {
-		result++
-	}
-	// top-right
-	if grid[3][3] == 'X' && grid[2][4] == 'M' && grid[1][5] == 'A' && grid[0][6] == 'S' {
-		result++
+
+	// Check how many directions produced a valid keyword.
+	for _, word := range words {
+		if keyword == string(word) {
+			result++
+		}
 	}
 
 	return result
+}
+
+// Gets an integer representation of a boolean value.
+//
+// NOTE: This looks like a useful function to extract into a utility.
+func B2i(input bool) int {
+	if input {
+		return 1
+	}
+
+	return 0
 }

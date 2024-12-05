@@ -1,6 +1,7 @@
 package puzzles
 
 import (
+	"lorech/advent-of-code-2024/pkg/utils"
 	"strconv"
 	"strings"
 )
@@ -59,9 +60,9 @@ func validateReport(levels []int, dampened bool) (bool, bool) {
 				return false, false
 			} else {
 				// FIXME: Brute force approach to validating dampening. I should do better!
-				_, prev := validateReport(remove(levels, i-1), true)
-				_, curr := validateReport(remove(levels, i), true)
-				_, next := validateReport(remove(levels, i+1), true)
+				_, prev := validateReport(utils.Remove(levels, i-1), true)
+				_, curr := validateReport(utils.Remove(levels, i), true)
+				_, next := validateReport(utils.Remove(levels, i+1), true)
 				return false, prev || curr || next
 			}
 		}
@@ -72,26 +73,13 @@ func validateReport(levels []int, dampened bool) (bool, bool) {
 				return false, false
 			} else {
 				// FIXME: Brute force approach to validating dampening. I should do better!
-				_, prev := validateReport(remove(levels, i-1), true)
-				_, curr := validateReport(remove(levels, i), true)
-				_, next := validateReport(remove(levels, i+1), true)
+				_, prev := validateReport(utils.Remove(levels, i-1), true)
+				_, curr := validateReport(utils.Remove(levels, i), true)
+				_, next := validateReport(utils.Remove(levels, i+1), true)
 				return false, prev || curr || next
 			}
 		}
 	}
 
 	return !dampened, dampened
-}
-
-// Remove an element from a slice by index.
-//
-// If the index is out of bounds, the original slice is returned.
-//
-// NOTE: This looks like a useful function to extract into a utility.
-func remove(slice []int, index int) []int {
-	if index < 0 || index >= len(slice) {
-		return slice
-	}
-	result := append([]int{}, slice...) // Copy the slice to avoid modifying the original.
-	return append(result[:index], result[index+1:]...)
 }

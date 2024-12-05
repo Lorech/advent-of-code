@@ -31,10 +31,18 @@ var inputDayFive string = `47|53
 61,13,29
 97,13,75,29,47`
 
-// Tests the second part of the puzzle for day 5.
+// Tests the first part of the puzzle for day 5.
 func TestDayFivePartOne(t *testing.T) {
 	e := 143
 	if r := d5p1(inputDayFive); e != r {
 		t.Errorf("d5p1() = %v, expected %v", r, e)
+	}
+}
+
+// Tests the second part of the puzzle for day 5.
+func TestDayFivePartTwo(t *testing.T) {
+	e := 123
+	if r := d5p2(inputDayFive); e != r {
+		t.Errorf("d5p2() = %v, expected %v", r, e)
 	}
 }

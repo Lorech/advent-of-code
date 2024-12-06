@@ -17,6 +17,8 @@ func Solve(day int, input string) (int, int) {
 		return dayFour(input)
 	case 5:
 		return dayFive(input)
+	case 6:
+		return daySix(input)
 	}
 	return 0, 0
 }

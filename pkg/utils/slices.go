@@ -1,9 +1,9 @@
 package utils
 
-// Remove an element from a slice by index.
+// Remove an element from an integer slice by index.
 //
 // If the index is out of bounds, the original slice is returned.
-func Remove(slice []int, index int) []int {
+func RemoveInt(slice []int, index int) []int {
 	if index < 0 || index >= len(slice) {
 		return slice
 	}

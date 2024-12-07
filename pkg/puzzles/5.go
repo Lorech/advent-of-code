@@ -48,7 +48,7 @@ func d5p2(input string) int {
 				// ensuring correct resolval of dependencies for any pages prior to to this page.
 				if resolved {
 					mutated[len(todo)-1] = page
-					todo = utils.Remove(todo, i)
+					todo = utils.RemoveInt(todo, i)
 					break
 				}
 			}

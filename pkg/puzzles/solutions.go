@@ -1,24 +1,34 @@
 package puzzles
 
+import "fmt"
+
 // Solves the puzzle for the given day using the provided input.
 //
 // Layers an abstraction over the main function to allow a simpler way of
 // getting the solutions of each given day, without having to implement file
 // parsing within the `puzzles` package.
-func Solve(day int, input string) (int, int) {
+func Solve(day int, input string) (int, int, error) {
+	var (
+		p1, p2 int
+	)
+	var err error
+
 	switch day {
 	case 1:
-		return dayOne(input)
+		p1, p2 = dayOne(input)
 	case 2:
-		return dayTwo(input)
+		p1, p2 = dayTwo(input)
 	case 3:
-		return dayThree(input)
+		p1, p2 = dayThree(input)
 	case 4:
-		return dayFour(input)
+		p1, p2 = dayFour(input)
 	case 5:
-		return dayFive(input)
+		p1, p2 = dayFive(input)
 	case 6:
-		return daySix(input)
+		p1, p2 = daySix(input)
+	default:
+		err = fmt.Errorf("No implemented solution")
 	}
-	return 0, 0
+
+	return p1, p2, err
 }

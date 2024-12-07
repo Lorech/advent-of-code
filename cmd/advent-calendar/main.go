@@ -15,7 +15,11 @@ func main() {
 			panic(error)
 		}
 
-		one, two := puzzles.Solve(day, string(data))
-		fmt.Printf("Day %v: %d, %d\n", day, one, two)
+		one, two, err := puzzles.Solve(day, string(data))
+		if err != nil {
+			fmt.Printf("Day %d: %v\n", day, err)
+		} else {
+			fmt.Printf("Day %d: %d, %d\n", day, one, two)
+		}
 	}
 }

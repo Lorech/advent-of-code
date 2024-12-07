@@ -1,5 +1,12 @@
-# Input files, ignored as per wishes of the author.
-/infiles
+# As per the wishes of the author, ignore input data.
+/infiles/*
+
+# Exceptions to the above rule - custom files I've created myself for testing.
+!/infiles/3005.txt
+!/infiles/3005-var.txt
+!/infiles/3005_test.txt
+!/infiles/3005_test-var.txt
+!/infiles/README.md
 
 # Misc.
 .DS_Store

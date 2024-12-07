@@ -19,3 +19,11 @@ func TestDaySevenPartOne(t *testing.T) {
 		t.Errorf("d7p1() = %v, expected %v", r, e)
 	}
 }
+
+// Tests the second part of the puzzle for day 7.
+func TestDaySevenPartSecond(t *testing.T) {
+	e := 11387
+	if r := d7p2(inputDaySeven); e != r {
+		t.Errorf("d7p2() = %v, expected %v", r, e)
+	}
+}

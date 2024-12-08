@@ -8,30 +8,58 @@ import (
 // Day 8: Resonant Collinearity
 // https://adventofcode.com/2024/day/8
 func dayEight(input string) (int, int) {
-	return d8p1(input), 0
+	return d8p1(input), d8p2(input)
 }
 
 // Completes the first half of the puzzle for day 8.
 func d8p1(input string) int {
 	rows := strings.Split(input, "\n")
+	bounds := [2]int{len(rows[0]) - 1, len(rows) - 1}
+	antennas := parseAntennas(rows)
+	antinodes := make([][2]int, 0)
+
+	for _, coords := range antennas {
+		fAntinodes := make([][2]int, 0)
+
+		for a := 0; a < len(coords)-1; a++ {
+			for b := a + 1; b < len(coords); b++ {
+				ns := findAntinodes(coords[a], coords[b], bounds, 1)
+				for _, n := range ns {
+					// Make sure there is not already an antinode here.
+					if slices.Contains(antinodes, n) {
+						continue
+					}
+
+					// Exclude antenna coordinates.
+					if slices.Contains(coords, n) {
+						continue
+					}
+
+					// Valid antinode.
+					fAntinodes = append(fAntinodes, n)
+				}
+			}
+		}
+
+		// Add all antinodes of this frequency to the total pool.
+		antinodes = append(antinodes, fAntinodes...)
+	}
+
+	return len(antinodes)
+}
+
+// Completes the second half of the puzzle for day 8.
+func d8p2(input string) int {
+	rows := strings.Split(input, "\n")
+	bounds := [2]int{len(rows[0]) - 1, len(rows) - 1}
 	antennas := parseAntennas(rows)
 	antinodes := make([][2]int, 0)
 
 	for _, coords := range antennas {
 		for a := 0; a < len(coords)-1; a++ {
 			for b := a + 1; b < len(coords); b++ {
-				ns := findAntinodes(coords[a], coords[b])
+				ns := findAntinodes(coords[a], coords[b], bounds, -1)
 				for _, n := range ns {
-					// X is out-of-bounds
-					if n[0] < 0 || n[0] >= len(rows[0]) {
-						continue
-					}
-
-					// Y is out-of-bounds
-					if n[1] < 0 || n[1] >= len(rows) {
-						continue
-					}
-
 					// Make sure there is not already an antinode here.
 					if slices.Contains(antinodes, n) {
 						continue
@@ -47,15 +75,54 @@ func d8p1(input string) int {
 	return len(antinodes)
 }
 
-// Returns the coordinates of the two antinodes that the provided pair of
-// antenna coordinates would produce. Always returns both antinodes, so the
-// boundrary within the grid must be validated by the caller.
-func findAntinodes(a [2]int, b [2]int) [2][2]int {
+// Returns the antinodes produced by the provided pair of antennas.
+//
+// The returned slice contains all valid antinodes, taking into consideration
+// the provided boundraries (max x and max y coordinates), and the maximum
+// number of antinodes that one antenna can produce.
+//
+// If n < 1, it is assumed that all possible antinodes should be searched.
+func findAntinodes(a [2]int, b [2]int, boundraries [2]int, n int) [][2]int {
+	antinodes := make([][2]int, 0)
 	xd := b[0] - a[0]
 	yd := b[1] - a[1]
-	an := [2]int{a[0] - xd, a[1] - yd}
-	bn := [2]int{b[0] + xd, b[1] + yd}
-	return [2][2]int{an, bn}
+
+	// Find all the antinodes from antenna a.
+	for steps := 0; true; steps++ {
+		x := a[0] - steps*xd
+		y := a[1] - steps*yd
+
+		// The node would be out of bounds.
+		if x < 0 || x > boundraries[0] || y < 0 || y > boundraries[1] {
+			break
+		}
+
+		antinodes = append(antinodes, [2]int{x, y})
+
+		// Check if we need more nodes.
+		if n > 0 && steps == n {
+			break
+		}
+	}
+
+	// Find all the antinodes from antenna b.
+	for steps := 0; true; steps++ {
+		x := b[0] + steps*xd
+		y := b[1] + steps*yd
+
+		// The node would be out of bounds.
+		if x < 0 || x > boundraries[0] || y < 0 || y > boundraries[1] {
+			break
+		}
+
+		antinodes = append(antinodes, [2]int{x, y})
+
+		// Check if we need more nodes.
+		if n > 0 && steps == n {
+			break
+		}
+	}
+	return antinodes
 }
 
 // Parses the input data into a structure containing antenna location data in

@@ -1,48 +1,36 @@
 package puzzles
 
-import "testing"
-
-var inputDayFive string = `47|53
-97|13
-97|61
-97|47
-75|29
-61|13
-75|53
-29|13
-97|29
-53|29
-61|53
-97|53
-61|29
-47|13
-75|47
-97|75
-47|61
-75|61
-47|29
-75|13
-53|13
-
-75,47,61,53,29
-97,61,53,29,13
-75,29,13
-75,97,47,61,53
-61,13,29
-97,13,75,29,47`
+import (
+	"lorech/advent-of-code-2024/pkg/file"
+	"testing"
+)
 
 // Tests the first part of the puzzle for day 5.
 func TestDayFivePartOne(t *testing.T) {
+	input, err := file.ReadTestFile(5)
+
+	if err != nil {
+		t.Errorf("Could not read test file: %v", err)
+		return
+	}
+
 	e := 143
-	if r := d5p1(inputDayFive); e != r {
+	if r := d5p1(input); e != r {
 		t.Errorf("d5p1() = %v, expected %v", r, e)
 	}
 }
 
 // Tests the second part of the puzzle for day 5.
 func TestDayFivePartTwo(t *testing.T) {
+	input, err := file.ReadTestFile(5)
+
+	if err != nil {
+		t.Errorf("Could not read test file: %v", err)
+		return
+	}
+
 	e := 123
-	if r := d5p2(inputDayFive); e != r {
+	if r := d5p2(input); e != r {
 		t.Errorf("d5p2() = %v, expected %v", r, e)
 	}
 }

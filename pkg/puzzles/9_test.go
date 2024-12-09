@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// Tests the short example of the puzzle for day 8.
+// Tests the short example of the puzzle for day 9.
 func TestDayNinePartOneSample(t *testing.T) {
 	input, err := file.ReadTestFile(9, "12345")
 

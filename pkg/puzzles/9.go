@@ -1,10 +1,15 @@
 package puzzles
 
 import (
-	"lorech/advent-of-code-2024/pkg/cslices"
+	"slices"
 	"strconv"
 	"strings"
 )
+
+type block struct {
+	val int // The value of the block.
+	len int // The times this value repeats at this position.
+}
 
 // Day 9: Disk Fragmenter
 // https://adventofcode.com/2024/day/9
@@ -17,85 +22,78 @@ func d9p1(input string) int {
 	disk := parseDisk(input)
 	checksum := 0
 
-	for true {
-		start, end := cslices.Appears(disk, -1)
-
-		// There is no more free space to insert data into.
-		if start == -1 {
-			break
+nextGap:
+	for i := 0; i < len(disk); i++ {
+		// Outer loop only deals with gaps.
+		if disk[i].val != -1 {
+			continue
 		}
 
-		// There is no more data at the end of the disk.
-		if end == len(disk) {
-			disk = disk[:start+1]
-		}
-
-		length := end - start
-		data := make([]int, length)
-
-		i := 0
-		l := 0
-		for l < length {
-			s := len(disk) - 1 - i
-			i++
-
-			// This empty block is larger than the data that can be inserted.
-			if s < end {
-				data = data[:l+1]
-				break
-			}
-
-			// There is no data to get from this block.
-			if disk[s] == -1 {
+		for j := len(disk) - 1; j > i; j-- {
+			// Inner loop only deals with blocks.
+			if disk[j].val == -1 {
+				disk = disk[:j]
 				continue
 			}
 
-			data[l] = disk[s]
-			l++
+			if disk[i].len == disk[j].len {
+				disk[i].val = disk[j].val
+				disk = disk[:j]
+				goto nextGap
+			} else if disk[j].len > disk[i].len {
+				disk[i].val = disk[j].val
+				disk[j].len -= disk[i].len
+				goto nextGap
+			} else if disk[i].len > disk[j].len {
+				l := disk[i].len
+				disk[i].val = disk[j].val
+				disk[i].len = disk[j].len
+				disk = slices.Insert(disk, i+1, block{-1, l - disk[j].len})
+				disk = disk[:j+1]
+				break
+			}
 		}
-
-		for i, d := range data {
-			disk[start+i] = d
-		}
-
-		disk = disk[:len(disk)-i]
 	}
 
-	for i, v := range disk {
-		checksum += i * v
+	p := 0
+	for _, b := range disk {
+		// Ignore any remaining free space.
+		if b.val == -1 {
+			continue
+		}
+
+		for j := range b.len {
+			checksum += (p + j) * b.val
+		}
+		p += b.len
+	}
+
+	return checksum
+}
 	}
 
 	return checksum
 }
 
-// Parses the input data, converting it to an uncompressed disk drive.
-func parseDisk(input string) []int {
+// Parses the input data, converting it to an organized structure of the disk drive.
+func parseDisk(input string) []block {
 	compression, _ := strings.CutSuffix(input, "\n")
-	disk := make([]int, 0)
+	disk := make([]block, 0)
 
 	for i := 0; i < len(compression); i += 2 {
 		f := i / 2
 		l, _ := strconv.Atoi(string(compression[i]))
-		s := 0
+		file := block{f, l}
 
-		// Free space is only added for blocks before the final one.
+		// Index the file into a slice of blocks.
+		disk = append(disk, file)
+
+		// Every file except for the last one also has free space after it.
 		if i != len(compression)-1 {
-			s, _ = strconv.Atoi(string(compression[i+1]))
+			s, _ := strconv.Atoi(string(compression[i+1]))
+			space := block{-1, s}
+			disk = append(disk, space)
 		}
-
-		// Map the file onto the disk.
-		files := make([]int, l)
-		for j := range files {
-			files[j] = f
-		}
-		disk = append(disk, files...)
-
-		// Map the free space onto the disk.
-		space := make([]int, s)
-		for j := range space {
-			space[j] = -1
-		}
-		disk = append(disk, space...)
 	}
 
 	return disk

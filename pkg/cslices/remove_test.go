@@ -6,10 +6,10 @@ import "testing"
 func TestRemoveFirstIntByIndex(t *testing.T) {
 	s := []int{1, 2, 3}
 	e := []int{2, 3}
-	r := RemoveInt(s, 0)
+	r := Remove(s, 0)
 
 	if len(r) != len(e) || r[0] != e[0] || r[1] != e[1] {
-		t.Errorf("RemoveInt() = %v, expected %v", r, e)
+		t.Errorf("Remove() = %v, expected %v", r, e)
 	}
 }
 
@@ -17,10 +17,10 @@ func TestRemoveFirstIntByIndex(t *testing.T) {
 func TestRemoveMiddleIntByIndex(t *testing.T) {
 	s := []int{1, 2, 3}
 	e := []int{1, 3}
-	r := RemoveInt(s, 1)
+	r := Remove(s, 1)
 
 	if len(r) != len(e) || r[0] != e[0] || r[1] != e[1] {
-		t.Errorf("RemoveInt() = %v, expected %v", r, e)
+		t.Errorf("Remove() = %v, expected %v", r, e)
 	}
 }
 
@@ -28,9 +28,9 @@ func TestRemoveMiddleIntByIndex(t *testing.T) {
 func TestRemoveLastIntByIndex(t *testing.T) {
 	s := []int{1, 2, 3}
 	e := []int{1, 2}
-	r := RemoveInt(s, 2)
+	r := Remove(s, 2)
 
 	if len(r) != len(e) || r[0] != e[0] || r[1] != e[1] {
-		t.Errorf("RemoveInt() = %v, expected %v", r, e)
+		t.Errorf("Remove() = %v, expected %v", r, e)
 	}
 }

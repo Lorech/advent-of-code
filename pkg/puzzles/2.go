@@ -60,9 +60,9 @@ func validateReport(levels []int, dampened bool) (bool, bool) {
 				return false, false
 			} else {
 				// FIXME: Brute force approach to validating dampening. I should do better!
-				_, prev := validateReport(cslices.RemoveInt(levels, i-1), true)
-				_, curr := validateReport(cslices.RemoveInt(levels, i), true)
-				_, next := validateReport(cslices.RemoveInt(levels, i+1), true)
+				_, prev := validateReport(cslices.Remove(levels, i-1), true)
+				_, curr := validateReport(cslices.Remove(levels, i), true)
+				_, next := validateReport(cslices.Remove(levels, i+1), true)
 				return false, prev || curr || next
 			}
 		}
@@ -73,9 +73,9 @@ func validateReport(levels []int, dampened bool) (bool, bool) {
 				return false, false
 			} else {
 				// FIXME: Brute force approach to validating dampening. I should do better!
-				_, prev := validateReport(cslices.RemoveInt(levels, i-1), true)
-				_, curr := validateReport(cslices.RemoveInt(levels, i), true)
-				_, next := validateReport(cslices.RemoveInt(levels, i+1), true)
+				_, prev := validateReport(cslices.Remove(levels, i-1), true)
+				_, curr := validateReport(cslices.Remove(levels, i), true)
+				_, next := validateReport(cslices.Remove(levels, i+1), true)
 				return false, prev || curr || next
 			}
 		}

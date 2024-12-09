@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	solved := 8
+	solved := 9
 	for day := 1; day <= solved; day++ {
 		data, error := file.ReadInfile(day)
 		if error != nil {

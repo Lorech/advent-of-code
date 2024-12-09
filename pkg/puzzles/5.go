@@ -1,7 +1,7 @@
 package puzzles
 
 import (
-	"lorech/advent-of-code-2024/pkg/utils"
+	"lorech/advent-of-code-2024/pkg/cslices"
 	"regexp"
 	"slices"
 	"strconv"
@@ -48,7 +48,7 @@ func d5p2(input string) int {
 				// ensuring correct resolval of dependencies for any pages prior to to this page.
 				if resolved {
 					mutated[len(todo)-1] = page
-					todo = utils.RemoveInt(todo, i)
+					todo = cslices.RemoveInt(todo, i)
 					break
 				}
 			}

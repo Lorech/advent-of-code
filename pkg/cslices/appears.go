@@ -16,8 +16,8 @@ func Appears[S ~[]V, V comparable](s S, v V) (int, int) {
 		return -1, -1
 	}
 
-	end := start + 1
-	for i := end; i < len(s); i++ {
+	end := len(s)
+	for i := start + 1; i < len(s); i++ {
 		if s[i] != v {
 			end = i
 			break
@@ -25,4 +25,24 @@ func Appears[S ~[]V, V comparable](s S, v V) (int, int) {
 	}
 
 	return start, end
+}
+
+// Find all appearence chains of a value within a slice, returning a new slice
+// containing arrays of all start and end positions of this value.
+func AppearsAll[S ~[]V, V comparable](s S, v V) [][2]int {
+	r := make([][2]int, 0)
+	start := 0
+
+	for {
+		a, b := Appears(s[start:], v)
+
+		if a == -1 || b == -1 {
+			break
+		}
+
+		r = append(r, [2]int{a + start, b + start})
+		start += b
+	}
+
+	return r
 }

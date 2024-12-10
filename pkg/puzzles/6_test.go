@@ -34,17 +34,3 @@ func TestDaySixPartTwo(t *testing.T) {
 		t.Errorf("d6p2() = %v, expected %v", r, e)
 	}
 }
-
-func TestDaySixEdgeCases(t *testing.T) {
-	input, err := file.ReadTestFile(6, "1")
-
-	if err != nil {
-		t.Errorf("Could not read test file: %v", err)
-		return
-	}
-
-	e := 0
-	if r := d6p2(input); e != r {
-		t.Errorf("d6p1() = %v, expected %v", r, e)
-	}
-}

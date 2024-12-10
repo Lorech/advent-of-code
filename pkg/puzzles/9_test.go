@@ -5,21 +5,6 @@ import (
 	"testing"
 )
 
-// Tests the short example of the puzzle for day 9.
-func TestDayNinePartOneSample(t *testing.T) {
-	input, err := file.ReadTestFile(9, "12345")
-
-	if err != nil {
-		t.Errorf("Could not read test file: %v", err)
-		return
-	}
-
-	e := 60
-	if r := d9p1(input); e != r {
-		t.Errorf("d9p1() = %v, expected %v", r, e)
-	}
-}
-
 // Tests the first part of the puzzle for day 9.
 func TestDayNinePartOne(t *testing.T) {
 	input, err := file.ReadTestFile(9)
@@ -32,21 +17,6 @@ func TestDayNinePartOne(t *testing.T) {
 	e := 1928
 	if r := d9p1(input); e != r {
 		t.Errorf("d9p1() = %v, expected %v", r, e)
-	}
-}
-
-// Tests the short example of the puzzle for day 9.
-func TestDayNinePartTwoSample(t *testing.T) {
-	input, err := file.ReadTestFile(9, "12345")
-
-	if err != nil {
-		t.Errorf("Could not read test file: %v", err)
-		return
-	}
-
-	e := 132
-	if r := d9p2(input); e != r {
-		t.Errorf("d9p2() = %v, expected %v", r, e)
 	}
 }
 

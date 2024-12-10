@@ -17,3 +17,5 @@ You can also create test files using the provided examples in each puzzle's desc
 For the actual puzzles, save the your input file in this directory with the filename `{day}.txt`, where `{day}` is the day of the puzzle (e.g. `1.txt` for Day 1).
 
 For the example puzzles, save the example data into a text file in this directory with the filename `{day}_test.txt`, where `{day}` is the day of the puzzle (e.g. `1_test.txt` for the example data for Day 1).
+
+My file reader also supports adding variations of tests for each day, such as the additional examples provided on the daily puzzle or custom ones, but I intend on not adding actual unit tests for them because they become hard to maintain due to not being able to add them to VCS. If you spot one of these lingering, consider it a bug!

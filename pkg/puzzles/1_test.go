@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-// Tests the full solution for day 1 based on the provided example.
-func TestDayOne(t *testing.T) {
+// Tests the first part of the puzzle for day 1.
+func TestDayOnePartOne(t *testing.T) {
 	input, err := file.ReadTestFile(1)
 
 	if err != nil {
@@ -14,10 +14,23 @@ func TestDayOne(t *testing.T) {
 		return
 	}
 
-	eDistance := 11
-	eSimilarity := 31
+	e := 11
+	if r := d1p1(input); e != r {
+		t.Errorf("d1p1() = %v, expected %v", r, e)
+	}
+}
 
-	if rDistance, rSimilarity := dayOne(input); eDistance != rDistance || eSimilarity != rSimilarity {
-		t.Errorf("DayOne() = %v, %v, want %v, %v", rDistance, rSimilarity, eDistance, eSimilarity)
+// Tests the second part of the puzzle for day 1.
+func TestDayOnePartTwo(t *testing.T) {
+	input, err := file.ReadTestFile(1)
+
+	if err != nil {
+		t.Errorf("Could not read test file: %v", err)
+		return
+	}
+
+	e := 31
+	if r := d1p2(input); e != r {
+		t.Errorf("d1p2() = %v, expected %v", r, e)
 	}
 }

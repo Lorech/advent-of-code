@@ -10,35 +10,13 @@ import (
 // Day 1: Historian Hysteria
 // https://adventofcode.com/2024/day/1
 func dayOne(input string) (int, int) {
-	var left, right []int
+	return d1p1(input), d1p2(input)
+}
 
-	// Parse both lists into separate integer slices.
-	rows := strings.Split(input, "\n")
-	for _, row := range rows {
-		ids := regexp.MustCompile(`\s+`).Split(row, -1)
+// Completes the first half of the puzzle for day 1.
+func d1p1(input string) int {
+	left, right := parseLists(input)
 
-		if len(ids) != 2 {
-			break
-		}
-
-		first, error := strconv.Atoi(ids[0])
-		if error != nil {
-			panic(error)
-		}
-		second, error := strconv.Atoi(ids[1])
-		if error != nil {
-			panic(error)
-		}
-
-		left = append(left, first)
-		right = append(right, second)
-	}
-
-	// Sort both lists in ascending order.
-	slices.Sort(left)
-	slices.Sort(right)
-
-	// Calculate the total distance between the two lists.
 	distance := 0
 	for i := 0; i < len(left); i++ {
 		d := right[i] - left[i]
@@ -48,7 +26,13 @@ func dayOne(input string) (int, int) {
 		distance += d
 	}
 
-	// Calculate the similarity between the two lists.
+	return distance
+}
+
+// Completes the second half of the puzzle for day 1.
+func d1p2(input string) int {
+	left, right := parseLists(input)
+
 	similarity := 0
 	for _, id := range left {
 		position, appears := slices.BinarySearch(right, id)
@@ -65,5 +49,26 @@ func dayOne(input string) (int, int) {
 		}
 	}
 
-	return distance, similarity
+	return similarity
+}
+
+// Parses the two input lists into separate, sorted integer slices.
+func parseLists(input string) ([]int, []int) {
+	rows := strings.Split(input, "\n")
+	left, right := make([]int, len(rows)), make([]int, len(rows))
+
+	for i, row := range rows {
+		ids := regexp.MustCompile(`\s+`).Split(row, -1)
+
+		first, _ := strconv.Atoi(ids[0])
+		second, _ := strconv.Atoi(ids[1])
+
+		left[i] = first
+		right[i] = second
+	}
+
+	slices.Sort(left)
+	slices.Sort(right)
+
+	return left, right
 }

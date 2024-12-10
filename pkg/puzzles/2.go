@@ -9,32 +9,42 @@ import (
 // Day 2: Red-Nosed Reports
 // https://adventofcode.com/2024/day/2
 func dayTwo(input string) (int, int) {
-	reports := strings.Split(input, "\n")
+	return d2p1(input), d2p2(input)
+}
+
+// Completes the first half of the puzzle for day 2.
+func d2p1(input string) int {
+	reports := parseReports(input)
+	safe := 0
+
+	for _, report := range reports {
+		// NOTE: Using the dampened result to detect if the answer is safe to avoid
+		// refactoring validateReport into a split function. Maybe I'll fix it one day.
+		_, d := validateReport(report, true)
+		if d {
+			safe++
+		}
+	}
+
+	return safe
+}
+
+// Completes the second half of the puzzle for day 2.
+func d2p2(input string) int {
+	reports := parseReports(input)
 	safe := 0
 	dampened := 0
 
 	for _, report := range reports {
-		// Parse the report into a slice of integers.
-		levels := make([]int, len(strings.Fields(report)))
-		for i, field := range strings.Fields(report) {
-			levels[i], _ = strconv.Atoi(field)
-		}
-
-		// Skip empty reports. TODO: Remove this when input comes in as lines.
-		if len(levels) < 1 {
-			continue
-		}
-
-		// Validate the report.
-		isSafe, isActuallySafe := validateReport(levels, false)
-		if isSafe {
+		s, d := validateReport(report, false)
+		if s {
 			safe++
-		} else if isActuallySafe {
+		} else if d {
 			dampened++
 		}
 	}
 
-	return safe, safe + dampened
+	return safe + dampened
 }
 
 // Validates a single report.
@@ -82,4 +92,20 @@ func validateReport(levels []int, dampened bool) (bool, bool) {
 	}
 
 	return !dampened, dampened
+}
+
+// Parses the input data into a slice of reports, containing a slice of levels.
+func parseReports(input string) [][]int {
+	rows := strings.Split(input, "\n")
+	reports := make([][]int, len(rows))
+
+	for i, row := range rows {
+		levels := make([]int, len(strings.Fields(row)))
+		for j, field := range strings.Fields(row) {
+			levels[j], _ = strconv.Atoi(field)
+		}
+		reports[i] = levels
+	}
+
+	return reports
 }

@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-// Tests the full solution for day 2 based on the provided example.
-func TestDayTwo(t *testing.T) {
+// Tests the first part of the puzzle for day 2.
+func TestDayTwoPartOne(t *testing.T) {
 	input, err := file.ReadTestFile(2)
 
 	if err != nil {
@@ -14,10 +14,23 @@ func TestDayTwo(t *testing.T) {
 		return
 	}
 
-	eSafe := 2
-	eActuallySafe := 4
+	e := 2
+	if r := d2p1(input); e != r {
+		t.Errorf("d2p1() = %v, expected %v", r, e)
+	}
+}
 
-	if rSafe, rActuallySafe := dayTwo(input); eSafe != rSafe || eActuallySafe != rActuallySafe {
-		t.Errorf("DayTwo() = %v, %v, want %v, %v", rSafe, rActuallySafe, eSafe, eActuallySafe)
+// Tests the second part of the puzzle for day 2.
+func TestDayTwoPartTwo(t *testing.T) {
+	input, err := file.ReadTestFile(2)
+
+	if err != nil {
+		t.Errorf("Could not read test file: %v", err)
+		return
+	}
+
+	e := 4
+	if r := d2p2(input); e != r {
+		t.Errorf("d2p2() = %v, expected %v", r, e)
 	}
 }

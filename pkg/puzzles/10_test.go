@@ -34,3 +34,33 @@ func TestDayTenPartTwo(t *testing.T) {
 		t.Errorf("d10p2() = %v, expected %v", r, e)
 	}
 }
+
+// Benchmarks the first part of the puzzle for day 10.
+func BenchmarkDayTenPartOne(b *testing.B) {
+	input, err := file.ReadInfile(10)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d10p1(input)
+	}
+}
+
+// Benchmarks the second part of the puzzle for day 10.
+func BenchmarkDayTenPartTwo(b *testing.B) {
+	input, err := file.ReadInfile(10)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d10p2(input)
+	}
+}

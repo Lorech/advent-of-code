@@ -34,3 +34,33 @@ func TestDaySixPartTwo(t *testing.T) {
 		t.Errorf("d6p2() = %v, expected %v", r, e)
 	}
 }
+
+// Benchmarks the first part of the puzzle for day 6.
+func BenchmarkDaySixPartOne(b *testing.B) {
+	input, err := file.ReadInfile(6)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d6p1(input)
+	}
+}
+
+// Benchmarks the second part of the puzzle for day 6.
+func BenchmarkDaySixPartTwo(b *testing.B) {
+	input, err := file.ReadInfile(6)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d6p2(input)
+	}
+}

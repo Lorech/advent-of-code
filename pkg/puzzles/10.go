@@ -9,7 +9,7 @@ import (
 // Day 10: Hoof It
 // https://adventofcode.com/2024/day/10
 func dayTen(input string) (int, int) {
-	return d10p1(input), 0
+	return d10p1(input), d10p2(input)
 }
 
 // Completes the first half of the puzzle for day 10.
@@ -28,6 +28,18 @@ func d10p1(input string) int {
 
 			peaks = append(peaks, peak)
 		}
+	}
+
+	return len(peaks)
+}
+
+// Completes the second half of the puzzle for day 10.
+func d10p2(input string) int {
+	trail, heads := parseTrail(input)
+	peaks := make([][2]int, 0)
+
+	for _, head := range heads {
+		peaks = append(peaks, walkTrail(head, trail)...)
 	}
 
 	return len(peaks)

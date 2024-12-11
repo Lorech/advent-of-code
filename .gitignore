@@ -8,5 +8,10 @@
 !/infiles/3005_test-var.txt
 !/infiles/README.md
 
+# Ignore all benchmarks, except for the records storage.
+/benchmarks/*
+!/benchmarks/bests.json
+!/benchmarks/README.md
+
 # Misc.
 .DS_Store

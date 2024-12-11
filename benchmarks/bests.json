@@ -1,0 +1,118 @@
+{
+  "pkg": "lorech/advent-of-code-2024/pkg/puzzles",
+  "os": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M1 Pro",
+  "results": {
+    "BenchmarkDayEightPartOne-8": {
+      "fun": "BenchmarkDayEightPartOne-8",
+      "ops": 8631,
+      "ns": 142187
+    },
+    "BenchmarkDayEightPartTwo-8": {
+      "fun": "BenchmarkDayEightPartTwo-8",
+      "ops": 1753,
+      "ns": 683552
+    },
+    "BenchmarkDayElevenPartOne-8": {
+      "fun": "BenchmarkDayElevenPartOne-8",
+      "ops": 1,
+      "ns": 1042480958
+    },
+    "BenchmarkDayElevenPartTwo-8": {
+      "fun": "BenchmarkDayElevenPartTwo-8",
+      "ops": 49,
+      "ns": 24161879
+    },
+    "BenchmarkDayFivePartOne-8": {
+      "fun": "BenchmarkDayFivePartOne-8",
+      "ops": 1088,
+      "ns": 1098907
+    },
+    "BenchmarkDayFivePartTwo-8": {
+      "fun": "BenchmarkDayFivePartTwo-8",
+      "ops": 618,
+      "ns": 1941656
+    },
+    "BenchmarkDayFourPartOne-8": {
+      "fun": "BenchmarkDayFourPartOne-8",
+      "ops": 938,
+      "ns": 1267884
+    },
+    "BenchmarkDayFourPartTwo-8": {
+      "fun": "BenchmarkDayFourPartTwo-8",
+      "ops": 754,
+      "ns": 1582738
+    },
+    "BenchmarkDayNinePartOne-8": {
+      "fun": "BenchmarkDayNinePartOne-8",
+      "ops": 49,
+      "ns": 23726758
+    },
+    "BenchmarkDayNinePartTwo-8": {
+      "fun": "BenchmarkDayNinePartTwo-8",
+      "ops": 1,
+      "ns": 16645714375
+    },
+    "BenchmarkDayOnePartOne-8": {
+      "fun": "BenchmarkDayOnePartOne-8",
+      "ops": 1146,
+      "ns": 1017527
+    },
+    "BenchmarkDayOnePartTwo-8": {
+      "fun": "BenchmarkDayOnePartTwo-8",
+      "ops": 1147,
+      "ns": 1048630
+    },
+    "BenchmarkDaySevenPartOne-8": {
+      "fun": "BenchmarkDaySevenPartOne-8",
+      "ops": 1039,
+      "ns": 1153904
+    },
+    "BenchmarkDaySevenPartTwo-8": {
+      "fun": "BenchmarkDaySevenPartTwo-8",
+      "ops": 3,
+      "ns": 414753153
+    },
+    "BenchmarkDaySixPartOne-8": {
+      "fun": "BenchmarkDaySixPartOne-8",
+      "ops": 1060,
+      "ns": 1142941
+    },
+    "BenchmarkDaySixPartTwo-8": {
+      "fun": "BenchmarkDaySixPartTwo-8",
+      "ops": 1,
+      "ns": 2834158167
+    },
+    "BenchmarkDayTenPartOne-8": {
+      "fun": "BenchmarkDayTenPartOne-8",
+      "ops": 3704,
+      "ns": 321192
+    },
+    "BenchmarkDayTenPartTwo-8": {
+      "fun": "BenchmarkDayTenPartTwo-8",
+      "ops": 3733,
+      "ns": 317777
+    },
+    "BenchmarkDayThreePartOne-8": {
+      "fun": "BenchmarkDayThreePartOne-8",
+      "ops": 1332,
+      "ns": 893907
+    },
+    "BenchmarkDayThreePartTwo-8": {
+      "fun": "BenchmarkDayThreePartTwo-8",
+      "ops": 1669,
+      "ns": 725578
+    },
+    "BenchmarkDayTwoPartOne-8": {
+      "fun": "BenchmarkDayTwoPartOne-8",
+      "ops": 5611,
+      "ns": 206996
+    },
+    "BenchmarkDayTwoPartTwo-8": {
+      "fun": "BenchmarkDayTwoPartTwo-8",
+      "ops": 4758,
+      "ns": 249159
+    }
+  }
+}

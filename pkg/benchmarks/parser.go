@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+// Parses any new benchmark files and compares them with the previous bests,
+// adding any new benchmarks or updating new bests as necessary.
 func Process() {
 	files := findUnprocessedFiles()
 	bms := make([]Benchmark, 0)

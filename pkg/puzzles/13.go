@@ -1,6 +1,7 @@
 package puzzles
 
 import (
+	"lorech/advent-of-code-2024/pkg/cmath"
 	"math"
 	"regexp"
 	"strconv"
@@ -27,10 +28,11 @@ type clawPrize struct {
 // Day 13: Claw Contraption
 // https://adventofcode.com/2024/day/13
 func dayThirteen(input string) (int, int) {
-	return d13p1(input), 0
+	return d13p1(input), d13p2(input)
 }
 
 // Completes the first half of the puzzle for day 13.
+// TODO: Refactor this to use the new apprach. Leaving it until I benchmark it for comparsison.
 func d13p1(input string) int {
 	machines := parseClawMachines(input)
 	price := 0
@@ -39,6 +41,27 @@ func d13p1(input string) int {
 		cost, valid := calculateCost(machine.A, machine.B, machine.P)
 		if valid {
 			price += cost
+		}
+	}
+
+	return price
+}
+
+// Completes the second half of the puzzle for day 13.
+func d13p2(input string) int {
+	machines := parseClawMachines(input)
+	price := 0
+
+	for _, machine := range machines {
+		machine.P = clawPrize{machine.P.X + 10000000000000, machine.P.Y + 10000000000000}
+
+		a, b := cmath.CramersRule(
+			machine.A.X, machine.B.X, machine.P.X,
+			machine.A.Y, machine.B.Y, machine.P.Y,
+		)
+
+		if a > 0 && b > 0 {
+			price += a*machine.A.Cost + b*machine.B.Cost
 		}
 	}
 

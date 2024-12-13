@@ -38,6 +38,8 @@ func Solve(day int, input string) (int, int, error) {
 		p1, p2 = dayEleven(input)
 	case 12:
 		p1, p2 = dayTwelve(input)
+	case 13:
+		p1, p2 = dayThirteen(input)
 	default:
 		err = fmt.Errorf("No implemented solution")
 	}

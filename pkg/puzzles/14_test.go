@@ -34,3 +34,18 @@ func BenchmarkDayFourteenPartOne(b *testing.B) {
 		d14p1(input)
 	}
 }
+
+// Benchmarks the second part of the puzzle for day 14.
+func BenchmarkDayFourteenPartTwo(b *testing.B) {
+	input, err := file.ReadInfile(14)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d14p2(input)
+	}
+}

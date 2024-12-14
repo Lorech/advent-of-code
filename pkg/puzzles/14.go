@@ -1,7 +1,11 @@
 package puzzles
 
 import (
+	"fmt"
+	"lorech/advent-of-code-2024/pkg/cmath"
+	"math"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -19,7 +23,7 @@ type coordinates struct {
 // Day 14: Restroom Redoubt
 // https://adventofcode.com/2024/day/14
 func dayFourteen(input string) (int, int) {
-	return d14p1(input), 0
+	return d14p1(input), d14p2(input)
 }
 
 // Completes the first half of the puzzle for day 14.
@@ -58,6 +62,90 @@ func d14p1(input string, roomSize ...int) int {
 	}
 
 	return len(quadrants[0]) * len(quadrants[1]) * len(quadrants[2]) * len(quadrants[3])
+}
+
+// Completes the second half of the puzzle for day 14.
+func d14p2(input string) int {
+	guards := parseGuards(input)
+	seconds := 0
+	xVariances, yVariances := make([]float64, 0), make([]float64, 0)
+
+	for true {
+		// Find the sum of both coordinates for every guard.
+		var (
+			xSum, ySum float64
+		)
+		for _, guard := range guards {
+			xSum += float64(guard.P.X)
+			ySum += float64(guard.P.Y)
+		}
+
+		// Find the mean of both coordinates.
+		xAvg, yAvg := xSum/float64(len(guards)), ySum/float64(len(guards))
+		var (
+			xDiffs, yDiffs float64
+		)
+		for _, guard := range guards {
+			xDiffs += math.Pow(float64(guard.P.X)-xAvg, 2)
+			yDiffs += math.Pow(float64(guard.P.Y)-yAvg, 2)
+		}
+
+		// Calculate the variance in the guards' positions.
+		xVariance, yVariance := xDiffs/float64(len(guards)), yDiffs/float64(len(guards))
+
+		// If we have no previous variances, this would be an outlier by default.
+		if len(xVariances) < 2 {
+			xVariances = append(xVariances, xVariance)
+			yVariances = append(yVariances, yVariance)
+			seconds++
+			passSecond(&guards, 101, 103)
+			continue
+		}
+
+		// Find the IQR of the known variances.
+		slices.Sort(xVariances)
+		slices.Sort(yVariances)
+		xMid, yMid := len(xVariances)/2, len(yVariances)/2
+		xOffset, yOffset := 0, 0
+		if len(xVariances)%2 == 1 {
+			xOffset++
+		}
+		if len(yVariances)%2 == 1 {
+			yOffset++
+		}
+		xQ1 := cmath.Median(xVariances[:xMid])
+		xQ3 := cmath.Median(xVariances[xMid+xOffset:])
+		yQ1 := cmath.Median(yVariances[:yMid])
+		yQ3 := cmath.Median(yVariances[yMid+yOffset:])
+
+		// Check if the variance in these values is an outlier between previous iterations.
+		xIQR := xQ3 - xQ1
+		yIQR := yQ3 - yQ1
+		if (xVariance < xQ1-1.5*xIQR || xVariance > xQ3+1.5*xIQR) && (yVariance < yQ1-1.5*yIQR || yVariance > yQ3+1.5*yIQR) {
+			// This is an outlier! We found the tree!
+			break
+		}
+
+		// This is not an outlier, so add it for the next iteration.
+		xVariances = append(xVariances, xVariance)
+		yVariances = append(yVariances, yVariance)
+		seconds++
+		passSecond(&guards, 101, 103)
+	}
+
+	// Draw the result for fun.
+	rows := make([][]rune, 103)
+	for i := range rows {
+		rows[i] = slices.Repeat([]rune{'.'}, 101)
+	}
+	for _, guard := range guards {
+		rows[guard.P.Y][guard.P.X] = 'O'
+	}
+	for _, row := range rows {
+		fmt.Println(string(row))
+	}
+
+	return seconds
 }
 
 // Moves every guard for 1 second worth of momvement.

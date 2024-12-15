@@ -6,11 +6,6 @@ import (
 	"strings"
 )
 
-type warehouseTile struct {
-	coords [2]int
-	tile   rune
-}
-
 // Day 15: Warehouse Woes
 // https://adventofcode.com/2024/day/15
 func dayFifteen(input string) (int, int) {
@@ -86,8 +81,14 @@ func d15p2(input string) int {
 	// Move the robot through his routine.
 	for _, move := range moves {
 		yd, xd := move.Velocity()
-		stack := make([]warehouseTile, 1)
-		stack[0] = warehouseTile{guard, '@'}
+		stack := make([]grid.Tile, 1)
+		stack[0] = grid.Tile{
+			Position: grid.Coordinates{
+				X: guard[1],
+				Y: guard[0],
+			},
+			Value: '@',
+		}
 		i := 0
 
 		// Check if there is a valid move to be made for every element in the stack.
@@ -98,11 +99,11 @@ func d15p2(input string) int {
 
 			// Don't parse the inside half of an object when moving horizontally
 			// to prevent adding false objects in the stack.
-			if t.tile == '[' && xd > 0 || t.tile == ']' && xd < 0 {
+			if t.Value == '[' && xd > 0 || t.Value == ']' && xd < 0 {
 				continue
 			}
 
-			y, x := t.coords[0]+yd, t.coords[1]+xd
+			y, x := t.Position.Y+yd, t.Position.X+xd
 			switch warehouse[y][x] {
 			case '#':
 				// This tile would go into the wall, so do nothing this turn.
@@ -112,12 +113,36 @@ func d15p2(input string) int {
 				continue
 			case '[':
 				// Left half of an object - we will need to check if it can be moved.
-				stack = append(stack, warehouseTile{[2]int{y, x}, '['})
-				stack = append(stack, warehouseTile{[2]int{y, x + 1}, ']'})
+				stack = append(stack, grid.Tile{
+					Position: grid.Coordinates{
+						X: x,
+						Y: y,
+					},
+					Value: '[',
+				})
+				stack = append(stack, grid.Tile{
+					Position: grid.Coordinates{
+						X: x + 1,
+						Y: y,
+					},
+					Value: ']',
+				})
 			case ']':
 				// Right half of an object - we will need to check if it can be moved.
-				stack = append(stack, warehouseTile{[2]int{y, x}, ']'})
-				stack = append(stack, warehouseTile{[2]int{y, x - 1}, '['})
+				stack = append(stack, grid.Tile{
+					Position: grid.Coordinates{
+						X: x,
+						Y: y,
+					},
+					Value: ']',
+				})
+				stack = append(stack, grid.Tile{
+					Position: grid.Coordinates{
+						X: x - 1,
+						Y: y,
+					},
+					Value: '[',
+				})
 			}
 		}
 
@@ -125,8 +150,8 @@ func d15p2(input string) int {
 		// Do it backwards, because we need to do LIFO to avoid overwriting tiles.
 		for i := len(stack) - 1; i >= 0; i-- {
 			t := stack[i]
-			warehouse[t.coords[0]+yd][t.coords[1]+xd] = t.tile
-			warehouse[t.coords[0]][t.coords[1]] = '.'
+			warehouse[t.Position.Y+yd][t.Position.X+xd] = t.Value
+			warehouse[t.Position.Y][t.Position.X] = '.'
 		}
 		guard[0] += yd
 		guard[1] += xd

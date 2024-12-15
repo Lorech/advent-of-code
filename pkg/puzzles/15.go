@@ -6,10 +6,15 @@ import (
 	"strings"
 )
 
+type warehouseTile struct {
+	coords [2]int
+	tile   rune
+}
+
 // Day 15: Warehouse Woes
 // https://adventofcode.com/2024/day/15
 func dayFifteen(input string) (int, int) {
-	return d15p1(input), 0
+	return d15p1(input), d15p2(input)
 }
 
 // Completes the first half of the puzzle for day 15.
@@ -74,10 +79,82 @@ func d15p1(input string) int {
 	return coordinates
 }
 
+// Completes the second half of the puzzle for day 15.
+func d15p2(input string) int {
+	warehouse, guard, moves := parseWarehouse(input, true)
+
+	// Move the robot through his routine.
+	for _, move := range moves {
+		yd, xd := move.Velocity()
+		stack := make([]warehouseTile, 1)
+		stack[0] = warehouseTile{guard, '@'}
+		i := 0
+
+		// Check if there is a valid move to be made for every element in the stack.
+		// Increment instead of going through the stack as that wouldn't update the loop condition.
+		for i < len(stack) {
+			t := stack[i]
+			i++
+
+			// Don't parse the inside half of an object when moving horizontally
+			// to prevent adding false objects in the stack.
+			if t.tile == '[' && xd > 0 || t.tile == ']' && xd < 0 {
+				continue
+			}
+
+			y, x := t.coords[0]+yd, t.coords[1]+xd
+			switch warehouse[y][x] {
+			case '#':
+				// This tile would go into the wall, so do nothing this turn.
+				goto nextMove
+			case '.':
+				// The current tile can be moved, but we need to check if the others can.
+				continue
+			case '[':
+				// Left half of an object - we will need to check if it can be moved.
+				stack = append(stack, warehouseTile{[2]int{y, x}, '['})
+				stack = append(stack, warehouseTile{[2]int{y, x + 1}, ']'})
+			case ']':
+				// Right half of an object - we will need to check if it can be moved.
+				stack = append(stack, warehouseTile{[2]int{y, x}, ']'})
+				stack = append(stack, warehouseTile{[2]int{y, x - 1}, '['})
+			}
+		}
+
+		// If we made it out of the for-loop, we can move all of the tiles!
+		// Do it backwards, because we need to do LIFO to avoid overwriting tiles.
+		for i := len(stack) - 1; i >= 0; i-- {
+			t := stack[i]
+			warehouse[t.coords[0]+yd][t.coords[1]+xd] = t.tile
+			warehouse[t.coords[0]][t.coords[1]] = '.'
+		}
+		guard[0] += yd
+		guard[1] += xd
+	nextMove: // Break out of the loop while avoiding value updates in failure cases.
+	}
+
+	// Calculate the position of each box.
+	coordinates := 0
+	for y, row := range warehouse {
+		start := 1
+		for true {
+			ob := slices.Index(row[start:], '[')
+			if ob == -1 {
+				break
+			}
+
+			coordinates += 100*y + start + ob
+			start += ob + 1
+		}
+	}
+
+	return coordinates
+}
+
 // Parses the input data into a grid representing the warehouse's initial
 // state, the robot's starting position, and a slice containing all the moves
 // the robot is supposed to make.
-func parseWarehouse(input string) ([][]rune, [2]int, []grid.Direction) {
+func parseWarehouse(input string, scaled ...bool) ([][]rune, [2]int, []grid.Direction) {
 	rows := strings.Split(input, "\n")
 	warehouse := make([][]rune, 0)
 	moves := make([]grid.Direction, 0)
@@ -91,6 +168,33 @@ func parseWarehouse(input string) ([][]rune, [2]int, []grid.Direction) {
 
 		// Warehouse grid.
 		if row[0] == '#' {
+			// Scale the warehouse by a factor of 2 if it's required by the puzzle.
+			if len(scaled) > 0 && scaled[0] {
+				r := make([]rune, len(row)*2)
+				for i, tile := range row {
+					x := i * 2
+					switch tile {
+					case '#':
+						r[x] = '#'
+						r[x+1] = '#'
+					case 'O':
+						r[x] = '['
+						r[x+1] = ']'
+					case '.':
+						r[x] = '.'
+						r[x+1] = '.'
+					case '@':
+						r[x] = '@'
+						r[x+1] = '.'
+						robot = [2]int{y, x}
+					}
+				}
+				warehouse = append(warehouse, []rune(r))
+
+				// Since we parsed each tile manually, we are done processing the row.
+				continue
+			}
+
 			// Check if this row contains the robot's coordinates if we dont know
 			// already know them. We can check for 0 because the warehouse has a
 			// border, meaning he can never spawn at 0,0 to start off.

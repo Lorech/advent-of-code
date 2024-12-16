@@ -1,0 +1,36 @@
+package puzzles
+
+import (
+	"lorech/advent-of-code-2024/pkg/file"
+	"testing"
+)
+
+// Tests the first part of the puzzle for day 16.
+func TestDaySixteenPartOne(t *testing.T) {
+	input, err := file.ReadTestFile(16)
+
+	if err != nil {
+		t.Errorf("Could not read test file: %v", err)
+		return
+	}
+
+	e := 11048
+	if r := d16p1(input); e != r {
+		t.Errorf("d16p1() = %v, expected %v", r, e)
+	}
+}
+
+// Benchmarks the first part of the puzzle for day 16.
+func BenchmarkDaySixteenPartOne(b *testing.B) {
+	input, err := file.ReadInfile(16)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d16p1(input)
+	}
+}

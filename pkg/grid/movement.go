@@ -11,7 +11,7 @@ const (
 )
 
 // Rotates the provided direction clockwise by one step.
-func (p *Direction) Rotate() {
+func (p *Direction) Clockwise() {
 	switch *p {
 	case Up:
 		*p = Right
@@ -21,6 +21,20 @@ func (p *Direction) Rotate() {
 		*p = Left
 	case Left:
 		*p = Up
+	}
+}
+
+// Rotates the provided direction counter-clockwise by one step.
+func (p *Direction) CounterClockwise() {
+	switch *p {
+	case Up:
+		*p = Left
+	case Right:
+		*p = Up
+	case Down:
+		*p = Right
+	case Left:
+		*p = Down
 	}
 }
 

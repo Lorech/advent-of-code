@@ -3,12 +3,22 @@ package grid
 import "testing"
 
 // Tests clockwise rotation of a direction.
-func TestRotate(t *testing.T) {
+func TestClockwise(t *testing.T) {
 	r := Up
-	r.Rotate()
+	r.Clockwise()
 	e := Right
 	if r != e {
-		t.Errorf("Rotate() = %v, expected %v", r, e)
+		t.Errorf("Clockwise() = %v, expected %v", r, e)
+	}
+}
+
+// Tests counter-clockwise rotation of a direction.
+func TestCounterClockwise(t *testing.T) {
+	r := Up
+	r.CounterClockwise()
+	e := Left
+	if r != e {
+		t.Errorf("CounterClockwise() = %v, expected %v", r, e)
 	}
 }
 

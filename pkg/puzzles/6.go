@@ -117,7 +117,7 @@ func walkPath(
 
 			// If we run into a dead-end, rotate and restart our steps counter.
 			if room[y+yd][x+xd] == '#' {
-				pointing.Rotate()
+				pointing.Clockwise()
 				guard[0] = y
 				guard[1] = x
 				break

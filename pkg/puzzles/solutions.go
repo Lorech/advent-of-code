@@ -7,9 +7,14 @@ import "fmt"
 // Layers an abstraction over the main function to allow a simpler way of
 // getting the solutions of each given day, without having to implement file
 // parsing within the `puzzles` package.
-func Solve(day int, input string) (int, int, error) {
+//
+// Returns values of type `interface{}` as we don't actually care about what
+// the result is, we just want to print it, so this makes it simpler when
+// mixing int and string puzzles without having to refactor all of them to
+// use the same type.
+func Solve(day int, input string) (interface{}, interface{}, error) {
 	var (
-		p1, p2 int
+		p1, p2 interface{}
 	)
 	var err error
 

@@ -51,6 +51,8 @@ func Solve(day int, input string) (interface{}, interface{}, error) {
 		p1, p2 = dayFifteen(input)
 	case 16:
 		p1, p2 = daySixteen(input)
+	case 17:
+		p1, p2 = daySeventeen(input)
 	default:
 		err = fmt.Errorf("No implemented solution")
 	}

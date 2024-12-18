@@ -19,6 +19,7 @@ func dayEighteen(input string) (int, int) {
 }
 
 // Completes the first half of the puzzle for day 18.
+//
 // As test data uses different inputs, a slice of optional integer parameters
 // can be specified with up to 3 values:
 //   - width of the maze
@@ -34,11 +35,9 @@ func d18p1(input string, options ...int) int {
 		n = options[2]
 	}
 
-	maze := createMaze(input, w, h, n)
-	end, success := navigateMaze(maze)
-	if !success {
-		panic("Failed to reach the end.")
-	}
+	obstacles := parseObstacles(input)
+	maze := createMaze(w, h, obstacles[:n])
+	end, _ := navigateMaze(maze)
 
 	path := make([]grid.Coordinates, 0)
 	for end.parent != nil {
@@ -85,22 +84,32 @@ func navigateMaze(maze [][]rune) (node, bool) {
 	return node{}, false
 }
 
-// Prepares the maze based on the provided input data, returning a 2D slice of
-// runes, in the specified height and width of the maze, laying the amount of
-// obstacles as specified in the obstacles parameter.
-func createMaze(input string, width int, height int, obstacles int) [][]rune {
+// Prepares a maze based on the provided size, and populates it with the
+// provided obstacles. The function assumes that the obstacles are within the
+// bounds of the provided maze size, crashing on an index error if one occurs.
+func createMaze(width int, height int, obstacles [][2]int) [][]rune {
 	maze := make([][]rune, height)
 	for y := range height {
 		maze[y] = slices.Repeat([]rune{'.'}, width)
 	}
 
-	rows := strings.Split(input, "\n")
-	for i := 0; i < obstacles; i++ {
-		coords := strings.Split(rows[i], ",")
-		ox, _ := strconv.Atoi(coords[0])
-		oy, _ := strconv.Atoi(coords[1])
-		maze[oy][ox] = '#'
+	for _, obstacle := range obstacles {
+		maze[obstacle[0]][obstacle[1]] = '#'
 	}
 
 	return maze
+}
+
+// Parses the provided input data into a slice of y,x coordinates where
+// obstacles may be found within the maze.
+func parseObstacles(input string) [][2]int {
+	rows := strings.Split(input, "\n")
+	obstacles := make([][2]int, len(rows))
+	for i, row := range rows {
+		coords := strings.Split(row, ",")
+		ox, _ := strconv.Atoi(coords[0])
+		oy, _ := strconv.Atoi(coords[1])
+		obstacles[i] = [2]int{oy, ox}
+	}
+	return obstacles
 }

@@ -1,7 +1,6 @@
 package puzzles
 
 import (
-	"fmt"
 	"slices"
 	"strings"
 )
@@ -9,17 +8,18 @@ import (
 // Day 19: Linen Layout
 // https://adventofcode.com/2024/day/19
 func dayNineteen(input string) (int, int) {
-	return d19p1(input), 0
+	return d19p1(input), d19p2(input)
 }
 
 // Completes the first half of the puzzle for day 19.
 func d19p1(input string) int {
 	towels, patterns := parseTowels(input)
+	cache := make(map[string]int)
 	possible := 0
 
 	for _, pattern := range patterns {
-		success := createPattern(pattern, towels)
-		if success {
+		options := countMatches(pattern, towels, &cache)
+		if options > 0 {
 			possible++
 		}
 	}
@@ -27,52 +27,52 @@ func d19p1(input string) int {
 	return possible
 }
 
-// Checks if the given color pattern can be recreated using the provided towel
-// colors. Returns true or false depending on if it's possible or not.
-func createPattern(pattern string, towels map[rune][]string) bool {
-	reconstructions := make([]string, 0)
+// Completes the second half of the puzzle for day 19.
+func d19p2(input string) int {
+	towels, patterns := parseTowels(input)
+	cache := make(map[string]int)
+	possible := 0
 
-	// Prepare the initial reconstructions based on the first letter.
+	for _, pattern := range patterns {
+		options := countMatches(pattern, towels, &cache)
+		possible += options
+	}
+
+	return possible
+}
+
+// Counts the amount of unique matches for a given pattern using only the
+// provided towels without overlap.
+func countMatches(pattern string, towels map[rune][]string, cache *map[string]int) int {
+	if len(pattern) == 0 {
+		return 0
+	}
+
+	matches, found := (*cache)[pattern]
+	if found {
+		return matches
+	}
+
 	options, found := towels[rune(pattern[0])]
 	if !found {
-		return false
-	}
-
-	for _, option := range options {
-		if strings.HasPrefix(pattern, option) {
-			reconstructions = append(reconstructions, option)
-		}
-	}
-
-	// Go through all in-progress reconstructions until there are no more and
-	// the pattern can't be made, or until we find a match for the pattern.
-	checked := make(map[string][]string, 0)
-	for len(reconstructions) > 0 {
-		r := reconstructions[len(reconstructions)-1]
-		reconstructions = reconstructions[:len(reconstructions)-1]
-
-		// This matches the pattern! No point in further processing.
-		if r == pattern {
-			return true
-		}
-
-		options, found := towels[rune(pattern[len(r)])]
-		if !found {
-			continue
-		}
-
-		// Persist all of the reconstructions that continue to remain valid.
-		// Only continue with new combinations to prevent infinite loops where
-		// some partials create other partials.
+		matches = 0
+	} else {
 		for _, option := range options {
-			if strings.HasPrefix(pattern[len(r):], option) && !slices.Contains(checked[r], option) {
-				reconstructions = append(reconstructions, fmt.Sprintf("%s%s", r, option))
-				checked[r] = append(checked[r], option)
+			// If the pattern exactly matches an option, store the number of ways to get it.
+			if pattern == option {
+				matches++
+			}
+
+			// Other, smaller patterns may still be created even if this is already a pattern.
+			if strings.HasPrefix(pattern, option) {
+				next := pattern[len(option):]
+				matches += countMatches(next, towels, cache)
 			}
 		}
 	}
 
-	return false
+	(*cache)[pattern] = matches
+	return matches
 }
 
 // Parses the input data into structured data:

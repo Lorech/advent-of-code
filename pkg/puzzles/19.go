@@ -18,51 +18,61 @@ func d19p1(input string) int {
 	possible := 0
 
 	for _, pattern := range patterns {
-		reconstructions := make([]string, 0)
-
-		// Prepare the initial reconstructions based on the first letter.
-		options, found := towels[rune(pattern[0])]
-		if !found {
-			continue
-		}
-
-		for _, option := range options {
-			if strings.HasPrefix(pattern, option) {
-				reconstructions = append(reconstructions, option)
-			}
-		}
-
-		// Go through all in-progress reconstructions until there are no more and
-		// the pattern can't be made, or until we find a match for the pattern.
-		checked := make(map[string][]string, 0)
-		for len(reconstructions) > 0 {
-			r := reconstructions[len(reconstructions)-1]
-			reconstructions = reconstructions[:len(reconstructions)-1]
-
-			// This matches the pattern! No point in further processing.
-			if r == pattern {
-				possible++
-				break
-			}
-
-			options, found := towels[rune(pattern[len(r)])]
-			if !found {
-				continue
-			}
-
-			// Persist all of the reconstructions that continue to remain valid.
-			// Only continue with new combinations to prevent infinite loops where
-			// some partials create other partials.
-			for _, option := range options {
-				if strings.HasPrefix(pattern[len(r):], option) && !slices.Contains(checked[r], option) {
-					reconstructions = append(reconstructions, fmt.Sprintf("%s%s", r, option))
-					checked[r] = append(checked[r], option)
-				}
-			}
+		success := createPattern(pattern, towels)
+		if success {
+			possible++
 		}
 	}
 
 	return possible
+}
+
+// Checks if the given color pattern can be recreated using the provided towel
+// colors. Returns true or false depending on if it's possible or not.
+func createPattern(pattern string, towels map[rune][]string) bool {
+	reconstructions := make([]string, 0)
+
+	// Prepare the initial reconstructions based on the first letter.
+	options, found := towels[rune(pattern[0])]
+	if !found {
+		return false
+	}
+
+	for _, option := range options {
+		if strings.HasPrefix(pattern, option) {
+			reconstructions = append(reconstructions, option)
+		}
+	}
+
+	// Go through all in-progress reconstructions until there are no more and
+	// the pattern can't be made, or until we find a match for the pattern.
+	checked := make(map[string][]string, 0)
+	for len(reconstructions) > 0 {
+		r := reconstructions[len(reconstructions)-1]
+		reconstructions = reconstructions[:len(reconstructions)-1]
+
+		// This matches the pattern! No point in further processing.
+		if r == pattern {
+			return true
+		}
+
+		options, found := towels[rune(pattern[len(r)])]
+		if !found {
+			continue
+		}
+
+		// Persist all of the reconstructions that continue to remain valid.
+		// Only continue with new combinations to prevent infinite loops where
+		// some partials create other partials.
+		for _, option := range options {
+			if strings.HasPrefix(pattern[len(r):], option) && !slices.Contains(checked[r], option) {
+				reconstructions = append(reconstructions, fmt.Sprintf("%s%s", r, option))
+				checked[r] = append(checked[r], option)
+			}
+		}
+	}
+
+	return false
 }
 
 // Parses the input data into structured data:

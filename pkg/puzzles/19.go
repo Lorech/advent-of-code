@@ -34,6 +34,7 @@ func d19p1(input string) int {
 
 		// Go through all in-progress reconstructions until there are no more and
 		// the pattern can't be made, or until we find a match for the pattern.
+		checked := make(map[string][]string, 0)
 		for len(reconstructions) > 0 {
 			r := reconstructions[len(reconstructions)-1]
 			reconstructions = reconstructions[:len(reconstructions)-1]
@@ -50,9 +51,12 @@ func d19p1(input string) int {
 			}
 
 			// Persist all of the reconstructions that continue to remain valid.
+			// Only continue with new combinations to prevent infinite loops where
+			// some partials create other partials.
 			for _, option := range options {
-				if strings.HasPrefix(pattern[len(r):], option) {
+				if strings.HasPrefix(pattern[len(r):], option) && !slices.Contains(checked[r], option) {
 					reconstructions = append(reconstructions, fmt.Sprintf("%s%s", r, option))
+					checked[r] = append(checked[r], option)
 				}
 			}
 		}

@@ -9,11 +9,6 @@ import (
 	"strings"
 )
 
-type node struct {
-	position grid.Coordinates // The position of this node.
-	parent   *node            // The parent node for obtaining the shortest path to this node.
-}
-
 // Day 18: RAM Run
 // https://adventofcode.com/2024/day/18
 func dayEighteen(input string) (interface{}, interface{}) {
@@ -39,12 +34,13 @@ func d18p1(input string, options ...int) int {
 
 	obstacles := parseObstacles(input)
 	maze := createMaze(w, h, obstacles[:n])
-	end, _ := navigateMaze(maze)
+	s, e := grid.Coordinates{X: 0, Y: 0}, grid.Coordinates{X: w - 1, Y: h - 1}
 
+	end, _ := grid.NavigateMaze(maze, s, e)
 	path := make([]grid.Coordinates, 0)
-	for end.parent != nil {
-		path = append(path, end.position)
-		end = *end.parent
+	for end.Parent != nil {
+		path = append(path, end.Position)
+		end = *end.Parent
 	}
 
 	return len(path)
@@ -65,6 +61,7 @@ func d18p2(input string, options ...int) string {
 		h = options[1]
 	}
 
+	s, e := grid.Coordinates{X: 0, Y: 0}, grid.Coordinates{X: w - 1, Y: h - 1}
 	obstacles := parseObstacles(input)
 	left, right := 0, len(obstacles)-1
 	middle := int(math.Floor(float64((left + right) / 2)))
@@ -73,7 +70,7 @@ func d18p2(input string, options ...int) string {
 
 	for true {
 		maze := createMaze(w, h, obstacles[left:middle])
-		_, success := navigateMaze(maze)
+		_, success := grid.NavigateMaze(maze, s, e)
 		mStartIndex, _ := slices.BinarySearch(bounds, middle)
 		mEndIndex := mStartIndex
 
@@ -89,7 +86,7 @@ func d18p2(input string, options ...int) string {
 		// We've already seen this value before, which means we know the bound.
 		if slices.Contains(bounds, middle) {
 			maze := createMaze(w, h, obstacles[left:middle])
-			_, success := navigateMaze(maze)
+			_, success := grid.NavigateMaze(maze, s, e)
 			var byte [2]int
 			if success {
 				byte = obstacles[middle]
@@ -106,42 +103,6 @@ func d18p2(input string, options ...int) string {
 	}
 
 	return result
-}
-
-// Navigates the maze using BFS, returning the finishing node, whose parent
-// nodes, chained all the way to the top, will form the shortest path to reach
-// the end. A second return value is provided as an indicator if the end was
-// actually reached.
-func navigateMaze(maze [][]rune) (node, bool) {
-	q := make([]node, 0)
-	v := make([][]bool, len(maze))
-	for i := range v {
-		v[i] = make([]bool, len(maze[0]))
-	}
-
-	q = append(q, node{grid.Coordinates{X: 0, Y: 0}, nil})
-	v[0][0] = true
-
-	for len(q) > 0 {
-		n := q[0]
-		q = q[1:]
-
-		if n.position.Y == len(maze)-1 && n.position.X == len(maze[0])-1 {
-			return n, true
-		}
-
-		dirs := [4]grid.Direction{grid.Up, grid.Down, grid.Left, grid.Right}
-		for _, dir := range dirs {
-			yd, xd := dir.Velocity()
-			ny, nx := n.position.Y+yd, n.position.X+xd
-			if ny >= 0 && ny < len(maze) && nx >= 0 && nx < len(maze[0]) && !v[ny][nx] && maze[ny][nx] != '#' {
-				v[ny][nx] = true
-				q = append(q, node{grid.Coordinates{X: nx, Y: ny}, &n})
-			}
-		}
-	}
-
-	return node{}, false
 }
 
 // Prepares a maze based on the provided size, and populates it with the

@@ -2,17 +2,18 @@ package puzzles
 
 import (
 	"lorech/advent-of-code-2024/pkg/grid"
-	"slices"
 	"strings"
 )
 
 // Day 20: Race Condition
 // https://adventofcode.com/2024/day/20
-func dayTwenty(input string) (interface{}, interface{}) {
+func dayTwenty(input string) (int, int) {
 	return d20p1(input), d20p2(input)
 }
 
 // Completes the first half of the puzzle for day 20.
+// TODO: Benchmark and compare to part 2. Part 2 has a reusable solution, which
+// may also be more efficient and speed up part 1 if applied.
 func d20p1(input string, options ...int) int {
 	threshold := 100
 	if len(options) > 0 {
@@ -63,35 +64,25 @@ func d20p2(input string, options ...int) int {
 	e, _ := grid.NavigateMaze(maze, start, end)
 	path := make([][2]int, 0)
 	for e.Parent != nil {
-		path = append(path, [2]int{e.Position.Y, e.Position.X})
+		path = append([][2]int{{e.Position.Y, e.Position.X}}, path...)
 		e = *e.Parent
 	}
-	path = append(path, [2]int{e.Position.Y, e.Position.X}) // Add the start node to the path.
+	path = append([][2]int{{e.Position.Y, e.Position.X}}, path...) // Add the start node to the path.
 
-	savings := make(map[int]int, 0)
-	for i, tile := range path {
-		// The shortest shortcut can place us 5 tiles ahead, so anything closer
-		// than 5 steps is actually within the path.
-		if i >= len(path)-4 {
-			break
-		}
-
-		cuts := findShortcuts(tile, maze, 20)
-		for _, cut := range cuts {
-			if slices.Contains(path[i+4:], cut) {
-				p := slices.Index(path, cut)
-				savings[p-i-2]++
+	savings := 0
+	for i, a := range path[:len(path)-threshold] {
+		for j, b := range path[i+threshold:] {
+			distance := grid.ManhattanDistance(
+				grid.Coordinates{X: a[1], Y: a[0]},
+				grid.Coordinates{X: b[1], Y: b[0]},
+			)
+			if distance <= 20 && distance <= j {
+				savings++
 			}
 		}
 	}
 
-	result := 0
-	for savings, count := range savings {
-		if savings >= threshold {
-			result += count
-		}
-	}
-	return result
+	return savings
 }
 
 // Find the unique tiles that can be shortcut from the current tile in the

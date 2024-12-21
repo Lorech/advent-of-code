@@ -62,20 +62,19 @@ func d20p2(input string, options ...int) int {
 
 	maze, start, end := parseMaze(input)
 	e, _ := grid.NavigateMaze(maze, start, end)
-	path := make([][2]int, 0)
+	path := make([]grid.Coordinates, 0)
 	for e.Parent != nil {
-		path = append([][2]int{{e.Position.Y, e.Position.X}}, path...)
+		path = append([]grid.Coordinates{e.Position}, path...)
 		e = *e.Parent
 	}
-	path = append([][2]int{{e.Position.Y, e.Position.X}}, path...) // Add the start node to the path.
+	path = append([]grid.Coordinates{e.Position}, path...) // Add the start node to the path.
 
 	savings := 0
 	for i, a := range path[:len(path)-threshold] {
-		for j, b := range path[i+threshold:] {
-			distance := grid.ManhattanDistance(
-				grid.Coordinates{X: a[1], Y: a[0]},
-				grid.Coordinates{X: b[1], Y: b[0]},
-			)
+		for j, b := range path[i+threshold:] { // j - time saved above threshold by teleporting.
+			distance := grid.ManhattanDistance(a, b)
+			// The tile is close enough that we don't exceed cheat time, and we also
+			// remain over the threshold of time save that we want to enumerate.
 			if distance <= 20 && distance <= j {
 				savings++
 			}
@@ -83,24 +82,6 @@ func d20p2(input string, options ...int) int {
 	}
 
 	return savings
-}
-
-// Find the unique tiles that can be shortcut from the current tile in the
-// provided time. This does not necessarily mean that this shortcut will save
-// time on a full run - just that it is reachable.
-func findShortcuts(tile [2]int, maze [][]rune, time int) [][2]int {
-	exits := make([][2]int, 0)
-	options := grid.WithinManhattanDistance(grid.Coordinates{X: tile[1], Y: tile[0]}, time)
-	for _, option := range options {
-		if option.Y < 0 || option.Y >= len(maze) || option.X < 0 || option.X >= len(maze[0]) {
-			continue
-		}
-
-		if maze[option.Y][option.X] == '.' {
-			exits = append(exits, [2]int{option.Y, option.X})
-		}
-	}
-	return exits
 }
 
 // Parses the input data into structured data:

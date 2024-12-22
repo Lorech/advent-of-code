@@ -2,6 +2,7 @@ package puzzles
 
 import (
 	"math"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -9,7 +10,7 @@ import (
 // Day 22: Monkey Market
 // https://adventofcode.com/2024/day/22
 func dayTwentyTwo(input string) (int, int) {
-	return d22p1(input), 0
+	return d22p1(input), d22p2(input)
 }
 
 // Completes the first half of the puzzle for day 22.
@@ -25,6 +26,42 @@ func d22p1(input string) int {
 	}
 
 	return sum
+}
+
+// Completes the second half of the puzzle for day 22.
+func d22p2(input string) int {
+	secrets := parsePrices(input)
+	bananas := 0
+	sequences := make(map[[4]int]int)
+
+	for _, secret := range secrets {
+		deltas := []int{0}
+		secretSequences := make([][4]int, 0)
+		for range 2000 {
+			p := secret % 10
+			secret = newSecret(secret)
+			n := secret % 10
+			deltas = append(deltas, n-p)
+
+			if len(deltas) == 4 {
+				sequence := [4]int{deltas[0], deltas[1], deltas[2], deltas[3]}
+				// Only count the first appearance of a sequence.
+				if !slices.Contains(secretSequences, sequence) {
+					sequences[sequence] += n
+					secretSequences = append(secretSequences, sequence)
+				}
+				deltas = deltas[1:]
+			}
+		}
+	}
+
+	for _, total := range sequences {
+		if total > bananas {
+			bananas = total
+		}
+	}
+
+	return bananas
 }
 
 // Derives a new secret number based on an existing secret number.

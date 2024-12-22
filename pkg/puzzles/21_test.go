@@ -34,3 +34,18 @@ func BenchmarkDayTwentyOnePartOne(b *testing.B) {
 		d21p1(input)
 	}
 }
+
+// Benchmarks the second part of the puzzle for day 21.
+func BenchmarkDayTwentyOnePartTwo(b *testing.B) {
+	input, err := file.ReadInfile(21)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d21p2(input)
+	}
+}

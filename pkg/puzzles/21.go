@@ -1,13 +1,11 @@
 package puzzles
 
 import (
-	"fmt"
 	"lorech/advent-of-code-2024/pkg/cslices"
 	"lorech/advent-of-code-2024/pkg/grid"
 	"slices"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type keypad struct {
@@ -53,6 +51,7 @@ func (k *keypad) move(char rune) []rune {
 		panic("Wrong keypad!")
 	}
 
+	blank := k.keys[' ']
 	moves := make([]rune, 0)
 	xd, yd := coordinates.X-k.position.X, coordinates.Y-k.position.Y
 	horizontal, vertical := '<', '^'
@@ -63,20 +62,36 @@ func (k *keypad) move(char rune) []rune {
 		vertical = 'v'
 	}
 
-	// We want to maximize sequential moves, and we want to prioritize moves that
-	// are as far away from the starting point as possible, as that helps the first
-	// point execute in higher order chains, so:
-	//   - Only move in one direction at a time as zigzagging would create large
-	// amounts of moves in higher tiers;
-	//   - Prefer moving left, then move vertically, then move right, as that
-	// creates the largest chain of matching moves in higher tiers.
-	if xd < 0 && k.keys[' '].Y == k.position.Y && k.keys[' '].X == k.position.X+xd || xd >= 0 {
+	// FIXME: This covers every single movement case, but is terrible.
+	if xd == 0 {
+		moves = append(moves, slices.Repeat([]rune{vertical}, max(yd, -yd))...)
+		moves = append(moves, slices.Repeat([]rune{horizontal}, max(xd, -xd))...)
+	} else if yd == 0 {
+		moves = append(moves, slices.Repeat([]rune{horizontal}, max(xd, -xd))...)
+		moves = append(moves, slices.Repeat([]rune{vertical}, max(yd, -yd))...)
+	} else if xd < 0 && blank.X == k.position.X+xd && blank.Y == k.position.Y {
+		moves = append(moves, slices.Repeat([]rune{vertical}, max(yd, -yd))...)
+		moves = append(moves, slices.Repeat([]rune{horizontal}, max(xd, -xd))...)
+	} else if xd < 0 {
+		moves = append(moves, slices.Repeat([]rune{horizontal}, max(xd, -xd))...)
+		moves = append(moves, slices.Repeat([]rune{vertical}, max(yd, -yd))...)
+	} else if yd < 0 && blank.Y == k.position.Y+yd && blank.X == k.position.X {
+		moves = append(moves, slices.Repeat([]rune{horizontal}, max(xd, -xd))...)
+		moves = append(moves, slices.Repeat([]rune{vertical}, max(yd, -yd))...)
+	} else if yd < 0 {
+		moves = append(moves, slices.Repeat([]rune{vertical}, max(yd, -yd))...)
+		moves = append(moves, slices.Repeat([]rune{horizontal}, max(xd, -xd))...)
+	} else if yd > 0 && blank.Y == k.position.Y+yd && blank.X == k.position.X {
+		moves = append(moves, slices.Repeat([]rune{horizontal}, max(xd, -xd))...)
+		moves = append(moves, slices.Repeat([]rune{vertical}, max(yd, -yd))...)
+	} else if yd > 0 {
 		moves = append(moves, slices.Repeat([]rune{vertical}, max(yd, -yd))...)
 		moves = append(moves, slices.Repeat([]rune{horizontal}, max(xd, -xd))...)
 	} else {
 		moves = append(moves, slices.Repeat([]rune{horizontal}, max(xd, -xd))...)
 		moves = append(moves, slices.Repeat([]rune{vertical}, max(yd, -yd))...)
 	}
+
 	moves = append(moves, 'A')
 
 	k.position = coordinates
@@ -88,7 +103,7 @@ func (k *keypad) move(char rune) []rune {
 // Day 21: Keypad Conundrum
 // https://adventofcode.com/2024/day/21
 func dayTwentyOne(input string) (int, int) {
-	return d21p1(input), 0
+	return d21p1(input), d21p2(input)
 }
 
 // Completes the first half of the puzzle for day 21.
@@ -102,11 +117,23 @@ func d21p1(input string) int {
 
 	complexity := 0
 	for _, code := range codes {
-		start := time.Now()
-		c := calculateCodeComplexity(code, 3, numpad, &controls)
-		end := time.Now()
-		fmt.Printf("Code %s has complexity %d, calculated in %v\n", code, c, end.Sub(start))
-		complexity += c
+		complexity += calculateCodeComplexity(code, 3, numpad, &controls)
+	}
+	return complexity
+}
+
+// Completes the second half of the puzzle for day 21.
+func d21p2(input string) int {
+	codes := strings.Split(input, "\n")
+	numpad := newNumpad()
+	controls := make([]keypad, 26)
+	for i := range controls {
+		controls[i] = newDirectionPad()
+	}
+
+	complexity := 0
+	for _, code := range codes {
+		complexity += calculateCodeComplexity(code, 26, numpad, &controls)
 	}
 	return complexity
 }

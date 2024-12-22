@@ -20,7 +20,7 @@ func d20p1(input string, options ...int) int {
 		threshold = options[0]
 	}
 
-	maze, start, end := parseMaze(input)
+	maze, start, end := parseTrack(input)
 	e, _ := grid.NavigateMaze(maze, start, end)
 	path := make([]grid.Tile, 0)
 	for e.Parent != nil {
@@ -60,7 +60,7 @@ func d20p2(input string, options ...int) int {
 		threshold = options[0]
 	}
 
-	maze, start, end := parseMaze(input)
+	maze, start, end := parseTrack(input)
 	e, _ := grid.NavigateMaze(maze, start, end)
 	path := make([]grid.Coordinates, 0)
 	for e.Parent != nil {
@@ -88,7 +88,7 @@ func d20p2(input string, options ...int) int {
 //   - The maze itself;
 //   - The coordinates of the original starting position;
 //   - The coordinates of the original ending position.
-func parseMaze(input string) ([][]rune, grid.Coordinates, grid.Coordinates) {
+func parseTrack(input string) ([][]rune, grid.Coordinates, grid.Coordinates) {
 	rows := strings.Split(input, "\n")
 	maze := make([][]rune, len(rows))
 	var start, end grid.Coordinates

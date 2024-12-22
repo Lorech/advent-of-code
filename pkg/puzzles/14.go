@@ -1,7 +1,6 @@
 package puzzles
 
 import (
-	"fmt"
 	"lorech/advent-of-code-2024/pkg/cmath"
 	"math"
 	"regexp"
@@ -131,18 +130,6 @@ func d14p2(input string) int {
 		yVariances = append(yVariances, yVariance)
 		seconds++
 		passSecond(&guards, 101, 103)
-	}
-
-	// Draw the result for fun.
-	rows := make([][]rune, 103)
-	for i := range rows {
-		rows[i] = slices.Repeat([]rune{'.'}, 101)
-	}
-	for _, guard := range guards {
-		rows[guard.P.Y][guard.P.X] = 'O'
-	}
-	for _, row := range rows {
-		fmt.Println(string(row))
 	}
 
 	return seconds

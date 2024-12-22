@@ -130,8 +130,7 @@ func comboOperand(literal int, a int, b int, c int) int {
 	case 7:
 		panic("You said 7 wouldn't appear!")
 	default:
-		fmt.Println(literal)
-		panic("You didn't even mention this value!")
+		panic(fmt.Sprintf("You didn't even mention that %d could appear!", literal))
 	}
 }
 

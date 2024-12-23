@@ -46,3 +46,22 @@ func AppearsAll[S ~[]V, V comparable](s S, v V) [][2]int {
 
 	return r
 }
+
+// Checks if a 2D slice contains a 1D slice.
+func ContainsSlice[T comparable](s [][]T, t []T) bool {
+	for _, ss := range s {
+		if len(ss) == len(t) {
+			m := true
+			for i := range ss {
+				if ss[i] != t[i] {
+					m = false
+					break
+				}
+			}
+			if m {
+				return true
+			}
+		}
+	}
+	return false
+}

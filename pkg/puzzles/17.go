@@ -2,7 +2,7 @@ package puzzles
 
 import (
 	"fmt"
-	"lorech/advent-of-code-2024/pkg/cslices"
+	"lorech/advent-of-code-2024/pkg/convert"
 	"math"
 	"regexp"
 	"slices"
@@ -36,7 +36,7 @@ func d17p2(input string) int {
 func reverseEngineer(digits []int, program []int, solutions *[]int) {
 	// End of the recursion - time to check if the program is fully the same.
 	if len(digits) == len(program) {
-		a, _ := cslices.Stoi(digits, 8)
+		a, _ := convert.Stoi(digits, 8)
 		r := runProgram(program, a, 0, 0)
 		if match(program, r) {
 			*solutions = append(*solutions, a)
@@ -48,7 +48,7 @@ func reverseEngineer(digits []int, program []int, solutions *[]int) {
 	e := program[len(program)-len(digits)-1:]
 	for i := range 8 {
 		d := append(append([]int(nil), digits...), i)
-		a, _ := cslices.Stoi(d, 8)
+		a, _ := convert.Stoi(d, 8)
 		r := runProgram(program, a, 0, 0)
 		if match(e, r) {
 			reverseEngineer(d, program, solutions)

@@ -1,7 +1,7 @@
 package puzzles
 
 import (
-	"lorech/advent-of-code-2024/pkg/cslices"
+	"lorech/advent-of-code-2024/pkg/convert"
 	"lorech/advent-of-code-2024/pkg/grid"
 	"slices"
 	"strconv"
@@ -146,7 +146,7 @@ func calculateCodeComplexity(code string, maxDepth int, numpad keypad, controls 
 		n, _ := strconv.Atoi(string(num))
 		nums[i] = n
 	}
-	value, _ := cslices.Stoi(nums)
+	value, _ := convert.Stoi(nums)
 	return value * moves
 }
 

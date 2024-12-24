@@ -1,4 +1,4 @@
-package cslices
+package convert
 
 import (
 	"fmt"

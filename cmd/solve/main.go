@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	start, end := 0, 23
+	start, end := 0, 24
 
 	pDay := flag.Int("day", -1, "Solve a specific day; solves all days by default")
 	flag.Parse()

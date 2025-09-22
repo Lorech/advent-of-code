@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"lorech/advent-of-code/pkg/commands"
+	"os"
+)
 
 func main() {
-	fmt.Println("Hello from the CLI!")
+	cmd := commands.NewRootCommand()
+	if err := cmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }

@@ -7,7 +7,7 @@ import (
 
 // Tests the first part of the puzzle for day 4.
 func TestDayFourPartOne(t *testing.T) {
-	input, err := file.ReadTestFile(4)
+	input, err := file.ReadTestFile(2024, 4)
 
 	if err != nil {
 		t.Errorf("Could not read test file: %v", err)
@@ -22,7 +22,7 @@ func TestDayFourPartOne(t *testing.T) {
 
 // Tests the second part of the puzzle for day 4.
 func TestDayFourPartTwo(t *testing.T) {
-	input, err := file.ReadTestFile(4)
+	input, err := file.ReadTestFile(2024, 4)
 
 	if err != nil {
 		t.Errorf("Could not read test file: %v", err)
@@ -37,7 +37,7 @@ func TestDayFourPartTwo(t *testing.T) {
 
 // Benchmarks the first part of the puzzle for day 4.
 func BenchmarkDayFourPartOne(b *testing.B) {
-	input, err := file.ReadInfile(4)
+	input, err := file.ReadInfile(2024, 4)
 
 	if err != nil {
 		b.Errorf("Could not read file: %v", err)
@@ -52,7 +52,7 @@ func BenchmarkDayFourPartOne(b *testing.B) {
 
 // Benchmarks the second part of the puzzle for day 4.
 func BenchmarkDayFourPartTwo(b *testing.B) {
-	input, err := file.ReadInfile(4)
+	input, err := file.ReadInfile(2024, 4)
 
 	if err != nil {
 		b.Errorf("Could not read file: %v", err)

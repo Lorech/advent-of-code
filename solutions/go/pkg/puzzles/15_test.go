@@ -7,7 +7,7 @@ import (
 
 // Tests the first part of the puzzle for day 15.
 func TestDayFifteenPartOne(t *testing.T) {
-	input, err := file.ReadTestFile(15)
+	input, err := file.ReadTestFile(2024, 15)
 
 	if err != nil {
 		t.Errorf("Could not read test file: %v", err)
@@ -22,7 +22,7 @@ func TestDayFifteenPartOne(t *testing.T) {
 
 // Benchmarks the first part of the puzzle for day 15.
 func BenchmarkDayFifteenPartOne(b *testing.B) {
-	input, err := file.ReadInfile(15)
+	input, err := file.ReadInfile(2024, 15)
 
 	if err != nil {
 		b.Errorf("Could not read file: %v", err)
@@ -37,7 +37,7 @@ func BenchmarkDayFifteenPartOne(b *testing.B) {
 
 // Tests the second part of the puzzle for day 15.
 func TestDayFifteenPartTwo(t *testing.T) {
-	input, err := file.ReadTestFile(15)
+	input, err := file.ReadTestFile(2024, 15)
 
 	if err != nil {
 		t.Errorf("Could not read test file: %v", err)
@@ -52,7 +52,7 @@ func TestDayFifteenPartTwo(t *testing.T) {
 
 // Benchmarks the second part of the puzzle for day 15.
 func BenchmarkDayFifteenPartTwo(b *testing.B) {
-	input, err := file.ReadInfile(15)
+	input, err := file.ReadInfile(2024, 15)
 
 	if err != nil {
 		b.Errorf("Could not read file: %v", err)

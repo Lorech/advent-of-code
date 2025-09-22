@@ -18,7 +18,7 @@ func main() {
 	}
 
 	for day := start; day <= end; day++ {
-		data, error := file.ReadInfile(day)
+		data, error := file.ReadInfile(2024, day)
 		if error != nil {
 			panic(error)
 		}

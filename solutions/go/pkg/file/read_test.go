@@ -4,7 +4,7 @@ import "testing"
 
 // Tests reading a puzzle input file.
 func TestReadInfile(t *testing.T) {
-	r, err := ReadInfile(3005)
+	r, err := ReadInfile(0000, 00)
 	e := `1
 2
 3
@@ -23,7 +23,7 @@ func TestReadInfile(t *testing.T) {
 
 // Tests reading a puzzle input variation file.
 func TestReadInfileVariation(t *testing.T) {
-	r, err := ReadInfile(3005, "var")
+	r, err := ReadInfile(0000, 00, "var")
 	e := `6
 7
 8
@@ -42,7 +42,7 @@ func TestReadInfileVariation(t *testing.T) {
 
 // Tests reading a puzzle test input file.
 func TestReadTestFile(t *testing.T) {
-	r, err := ReadTestFile(3005)
+	r, err := ReadTestFile(0000, 00)
 	e := `1
 2
 3
@@ -61,7 +61,7 @@ func TestReadTestFile(t *testing.T) {
 
 // Tests reading a puzzle test input variaton file.
 func TestReadTestFileWithVariation(t *testing.T) {
-	r, err := ReadTestFile(3005, "var")
+	r, err := ReadTestFile(0000, 00, "var")
 	e := `6
 7
 8

@@ -2,10 +2,7 @@
 /infiles/*
 
 # Exceptions to the above rule - files I've created myself.
-!/infiles/3005.txt
-!/infiles/3005-var.txt
-!/infiles/3005_test.txt
-!/infiles/3005_test-var.txt
+!/infiles/0000
 !/infiles/README.md
 
 # Ignore all benchmarks, except for record storage.

@@ -6,57 +6,43 @@ import (
 	"strings"
 )
 
-// Reads the contents of a file for a specific day from the default input file
-// directory.
+// Reads the puzzle contents for a specific day.
 //
-// Expects files to be named "{day}.txt" or "{day}-{variation}.txt", where the
-// variation is provided as the second parameter.
-//
-// By default, files will be looked for in the "infiles" directory at the root
-// of the module, but setting the third parameter to `true` will look for files
-// relative to the running binary, e.g., package, when running tests.
-func ReadInfile(day int, config ...string) (string, error) {
-	path := fmt.Sprintf("../../infiles/%v.txt", day)
-
+// Expects files to be located in `infiles/{year}/{day}-{variation}.txt`
+// relative to the root of the repository, where `variation` is provided in
+// the third argument to the function.
+func ReadInfile(year int, day int, config ...string) (string, error) {
 	for i := range config {
 		switch i {
 		case 0:
 			if config[i] != "" {
-				// Add the variation if it is provided.
-				path = fmt.Sprintf("../../infiles/%v-%v.txt", day, config[i])
+				return readFile(fmt.Sprintf("../../infiles/%v/%v-%v.txt", year, day, config[i]))
 			}
 		}
 	}
 
-	return readFile(path)
+	return readFile(fmt.Sprintf("../../infiles/%v/%v.txt", year, day))
 }
 
-// Reads the contents of a file for a specific day's example from the default
-// input file directory.
+// Reads the example puzzle contents for a specific day.
 //
-// Expects files to be named "{day}_test.txt" or "{day}_test-{variation}.txt",
-// where the variation is provided as the second parameter.
-//
-// By default, files will be looked for in the "infiles" directory at the root
-// of the module, but setting the third parameter to `true` will look for files
-// relative to the running binary, e.g., package, when running tests.
-func ReadTestFile(day int, config ...string) (string, error) {
-	path := fmt.Sprintf("../../infiles/%v_test.txt", day)
-
+// Expects files to be located in `infiles/{year}/{day}_test-{variation}.txt`
+// relative to the root of the repository, where `variation` is provided in
+// the third argument to the function.
+func ReadTestFile(year int, day int, config ...string) (string, error) {
 	for i := range config {
 		switch i {
 		case 0:
 			if config[i] != "" {
-				// Add the variation if it is provided.
-				path = fmt.Sprintf("../../infiles/%v_test-%v.txt", day, config[i])
+				return readFile(fmt.Sprintf("../../infiles/%v/%v_test-%v.txt", year, day, config[i]))
 			}
 		}
 	}
 
-	return readFile(path)
+	return readFile(fmt.Sprintf("../../infiles/%v/%v_test.txt", year, day))
 }
 
-// Reads the contents of a file.
+// Reads the contents of a file relative to the root of the root of the repository.
 //
 // Strips the final character from the file to prevent an additional empty
 // line at the end of the resulting string read into memory.

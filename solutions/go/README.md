@@ -16,27 +16,31 @@ Over time, I plan on expanding the repository further, using this as a playgroun
 
 ### Solving puzzles
 
-To solve puzzles for every day that I have a solution for:
+Solves depend on the personalized input files generated for each user. These files must be stored within the `infiles` directory at the root of the repository, named `{year}/{day}.txt`, e.g., `2024/09.txt`.
+
+Solve every puzzle with a solution:
 
 ```bash
 go run cmd/solve/main.go
 ```
 
-To solve puzzles for a specific day only (e.g. day 9):
+Solve a specific day's puzzle:
 
-```bash'
+```bash
 go run cmd/solve/main.go -day 9
 ```
 
 ### Running tests
 
-To run all tests:
+Tests depend on the example solutions part of each puzzle's description. These files must be stored within the `infiles` directory at the root of the repository, named `{year}/{day}_test.txt`, e.g., `2024/09_test.txt`.
+
+Test every puzzle with solutions:
 
 ```bash
 go test pkg/puzzles
 ```
 
-To run tests for a specific day (e.g. day 9):
+Test a specific day's puzzle:
 
 ```bash
 go test pkg/puzzles -run Nine
@@ -44,25 +48,16 @@ go test pkg/puzzles -run Nine
 
 ### Running benchmarks
 
-To run all benchmarks:
+Benchmarks depend on the personalized input files generated for each user. These files must be stored within the `infiles` directory at the root of the repository, named `{year}/{day}.txt`, e.g., `2024/09.txt`.
+
+Benchmark every puzzle with a solution:
 
 ```bash
 go test pkg/puzzles -bench .
 ```
 
-To run benchmarks for a specific day (e.g. day 9):
+Benchmark a specific day's puzzle:
 
 ```bash
 go test pkg/puzzles bench Nine
 ```
-
-## Input data
-
-As per the author's request, no input data is stored in this repository. All data used for puzzles must be obtained from the website directly.
-
-Two types of input files are used and commited:
-
-- `infiles/{day}.txt` for the puzzle input;
-- `infiles/{day}_test.txt` for the example input.
-
-For more details about obtaining and storing input data, see [the infile README](infiles/README.md).

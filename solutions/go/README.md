@@ -53,7 +53,7 @@ go test pkg/puzzles -bench .
 To run benchmarks for a specific day (e.g. day 9):
 
 ```bash
-go test pkg/puzzles -run Nine
+go test pkg/puzzles bench Nine
 ```
 
 ## Input data

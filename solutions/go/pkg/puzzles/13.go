@@ -1,7 +1,7 @@
 package puzzles
 
 import (
-	"lorech/advent-of-code-2024/pkg/cmath"
+	"lorech/advent-of-code/pkg/cmath"
 	"math"
 	"regexp"
 	"strconv"

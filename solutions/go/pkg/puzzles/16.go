@@ -2,7 +2,7 @@ package puzzles
 
 import (
 	"container/heap"
-	"lorech/advent-of-code-2024/pkg/grid"
+	"lorech/advent-of-code/pkg/grid"
 	"math"
 	"slices"
 	"strings"

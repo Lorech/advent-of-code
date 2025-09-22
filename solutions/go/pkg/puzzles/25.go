@@ -1,8 +1,6 @@
 package puzzles
 
-import (
-	"strings"
-)
+import "strings"
 
 // Day 25: Code Chronicle
 // https://adventofcode.com/2024/day/25

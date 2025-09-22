@@ -1,3 +1,3 @@
-module lorech/advent-of-code-2024
+module lorech/advent-of-code
 
 go 1.23.3

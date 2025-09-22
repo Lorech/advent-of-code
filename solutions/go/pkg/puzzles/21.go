@@ -1,8 +1,8 @@
 package puzzles
 
 import (
-	"lorech/advent-of-code-2024/pkg/convert"
-	"lorech/advent-of-code-2024/pkg/grid"
+	"lorech/advent-of-code/pkg/convert"
+	"lorech/advent-of-code/pkg/grid"
 	"slices"
 	"strconv"
 	"strings"

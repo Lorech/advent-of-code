@@ -2,7 +2,7 @@ package puzzles
 
 import (
 	"fmt"
-	"lorech/advent-of-code-2024/pkg/convert"
+	"lorech/advent-of-code/pkg/convert"
 	"slices"
 	"strconv"
 	"strings"

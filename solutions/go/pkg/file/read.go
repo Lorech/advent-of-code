@@ -16,12 +16,12 @@ func ReadInfile(year int, day int, config ...string) (string, error) {
 		switch i {
 		case 0:
 			if config[i] != "" {
-				return readFile(fmt.Sprintf("../../infiles/%v/%v-%v.txt", year, day, config[i]))
+				return readFile(fmt.Sprintf("../../infiles/%04v/%02v-%v.txt", year, day, config[i]))
 			}
 		}
 	}
 
-	return readFile(fmt.Sprintf("../../infiles/%v/%v.txt", year, day))
+	return readFile(fmt.Sprintf("../../infiles/%04v/%02v.txt", year, day))
 }
 
 // Reads the example puzzle contents for a specific day.
@@ -34,12 +34,12 @@ func ReadTestFile(year int, day int, config ...string) (string, error) {
 		switch i {
 		case 0:
 			if config[i] != "" {
-				return readFile(fmt.Sprintf("../../infiles/%v/%v_test-%v.txt", year, day, config[i]))
+				return readFile(fmt.Sprintf("../../infiles/%04v/%02v_test-%v.txt", year, day, config[i]))
 			}
 		}
 	}
 
-	return readFile(fmt.Sprintf("../../infiles/%v/%v_test.txt", year, day))
+	return readFile(fmt.Sprintf("../../infiles/%04v/%02v_test.txt", year, day))
 }
 
 // Reads the contents of a file relative to the root of the root of the repository.

@@ -1,9 +1,0 @@
-goos: darwin
-goarch: arm64
-pkg: lorech/advent-of-code-2024/pkg/benchmarks
-cpu: Apple M1 Pro
-BenchmarkNumberOne-8        	    3656	    328111 ns/op
-BenchmarkNumberTwo-8        	    3758	    325689 ns/op
-BenchmarkNumberThree-8      	    1148	   1031164 ns/op
-PASS
-ok  	lorech/advent-of-code-2024/pkg/benchmarks	0.209s

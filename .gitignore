@@ -1,17 +1,17 @@
 # As per the wishes of the author, ignore input data.
 /infiles/*
 
-# Exceptions to the above rule - custom files I've created myself for testing.
+# Exceptions to the above rule - files I've created myself.
 !/infiles/3005.txt
 !/infiles/3005-var.txt
 !/infiles/3005_test.txt
 !/infiles/3005_test-var.txt
 !/infiles/README.md
 
-# Ignore all benchmarks, except for the records storage.
-/benchmarks/*
-!/benchmarks/bests.json
-!/benchmarks/README.md
+# Ignore all benchmarks, except for record storage.
+**/benchmarks/*
+!**/benchmarks/bests.json
+!**/benchmarks/README.md
 
 # Misc.
 .DS_Store

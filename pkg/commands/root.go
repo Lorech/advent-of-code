@@ -11,6 +11,7 @@ func NewRootCommand() *cobra.Command {
 
 	cmd.AddCommand(NewVersionCommand())
 	cmd.AddCommand(NewOpenCommand())
+	cmd.AddCommand(NewRandomCommand())
 
 	return cmd
 }

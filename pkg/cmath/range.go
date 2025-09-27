@@ -1,6 +1,14 @@
 package cmath
 
-import "math"
+import (
+	"math"
+	"math/rand/v2"
+)
+
+// Picks a random integer within a range of integers.
+func RandomInRange(min, max int) int {
+	return rand.IntN(max-min) + min
+}
 
 // Finds the closest number in [targetLower, targetUpper] given an input
 // number within [domainLower, domainUpper]. Distances are computed circularly

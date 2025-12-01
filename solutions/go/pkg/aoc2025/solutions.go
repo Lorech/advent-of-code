@@ -14,6 +14,8 @@ func Solve(day int, input string) (any, any, error) {
 	var err error
 
 	switch day {
+	case 1:
+		p1, p2 = dayOne(input)
 	default:
 		err = fmt.Errorf("No implemented solution")
 	}

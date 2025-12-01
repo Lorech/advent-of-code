@@ -1,0 +1,51 @@
+package aoc2024
+
+import (
+	"lorech/advent-of-code/pkg/file"
+	"testing"
+)
+
+// Tests the first part of the puzzle for day 13.
+func TestDayThirteenPartOne(t *testing.T) {
+	input, err := file.ReadTestFile(2024, 13)
+
+	if err != nil {
+		t.Errorf("Could not read test file: %v", err)
+		return
+	}
+
+	e := 480
+	if r := d13p1(input); e != r {
+		t.Errorf("d13p1() = %v, expected %v", r, e)
+	}
+}
+
+// Benchmarks the first part of the puzzle for day 13.
+func BenchmarkDayThirteenPartOne(b *testing.B) {
+	input, err := file.ReadInfile(2024, 13)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d13p1(input)
+	}
+}
+
+// Benchmarks the second part of the puzzle for day 13.
+func BenchmarkDayThirteenPartTwo(b *testing.B) {
+	input, err := file.ReadInfile(2024, 13)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d13p2(input)
+	}
+}

@@ -9,7 +9,7 @@ import (
 // Day 2: Gift Shop
 // https://adventofcode.com/2025/day/2
 func dayTwo(input string) (int, int) {
-	return d2p1(input), 0
+	return d2p1(input), d2p2(input)
 }
 
 // Completes the first half of the puzzle for day 2.
@@ -17,27 +17,64 @@ func d2p1(input string) int {
 	ids, sum := parseIds(input), 0
 
 	for _, id := range ids {
-		// If the ID consists of an odd amount of digits, it can't consist of two sequences.
-		if len(strconv.Itoa(id))%2 == 1 {
-			continue
-		}
-
 		seq := strconv.Itoa(id % 10)
 		for i := id / 10; i > 0; i /= 10 {
-			if fmt.Sprintf("%s%s", seq, seq) == strconv.Itoa(id) {
+			if consistsOfSequence(strconv.Itoa(id), seq, 2) {
 				sum += id
 				break
 			}
-
 			seq = fmt.Sprintf("%d%s", i%10, seq)
-			// If the sequence is longer than the ID, all possibilities are exhausted
-			if len(seq) > len(strconv.Itoa(id)) {
-				break
-			}
 		}
 	}
 
 	return sum
+}
+
+// Completes the second half of the puzzle for day 2.
+func d2p2(input string) int {
+	ids, sum := parseIds(input), 0
+
+	for _, id := range ids {
+		seq := strconv.Itoa(id % 10)
+		for i := id / 10; i > 0; i /= 10 {
+			if consistsOfSequence(strconv.Itoa(id), seq, 50) {
+				sum += id
+				break
+			}
+			seq = fmt.Sprintf("%d%s", i%10, seq)
+		}
+	}
+
+	return sum
+}
+
+// Checks if an ID is made up exclusively of sequence seq appearing in the ID
+// up to max number of times (inclusive).
+func consistsOfSequence(id string, seq string, max int) bool {
+	s := seq
+
+	for n := 2; n <= max; n++ {
+		s = fmt.Sprintf("%s%s", seq, s)
+
+		// The current sequence size can't fill the ID, but this value
+		// flip-flops through iterations, so it may come back around
+		if len(id)%2 == 1 && !(len(s)%2 == 1 && n%2 == 1) {
+			continue
+		}
+
+		// The sequence is too long, so it definitely does not create the ID
+		// as any further loops would only make it even longer than it is now
+		if len(s) > len(id) {
+			return false
+		}
+
+		// The sequence matches the ID, which is what we're looking for
+		if id == s {
+			return true
+		}
+	}
+
+	return false
 }
 
 // Parses the input data into an integer sequence of IDs.

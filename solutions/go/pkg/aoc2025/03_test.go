@@ -34,3 +34,33 @@ func BenchmarkDayThreePartOne(b *testing.B) {
 		d3p1(input)
 	}
 }
+
+// Tests the second part of the puzzle for day 3.
+func TestDayThreePartTwo(t *testing.T) {
+	input, err := file.ReadTestFile(2025, 3)
+
+	if err != nil {
+		t.Errorf("Could not read test file: %v", err)
+		return
+	}
+
+	e := 3121910778619
+	if r := d3p2(input); e != r {
+		t.Errorf("d3p2() = %v, expected %v", r, e)
+	}
+}
+
+// Benchmarks the second part of the puzzle for day 3.
+func BenchmarkDayThreePartTwo(b *testing.B) {
+	input, err := file.ReadInfile(2025, 3)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d3p2(input)
+	}
+}

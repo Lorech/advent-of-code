@@ -14,7 +14,7 @@ type numRange struct {
 // Day 5: Cafeteria
 // https://adventofcode.com/2025/day/5
 func dayFive(input string) (int, int) {
-	return d5p1(input), 0
+	return d5p1(input), d5p2(input)
 }
 
 // Completes the first half of the puzzle for day 5.
@@ -29,6 +29,41 @@ func d5p1(input string) int {
 				break
 			}
 		}
+	}
+
+	return fresh
+}
+
+// Completes the second half of the puzzle for day 5.
+func d5p2(input string) int {
+	ranges, _ := parseInventory(input)
+	removed, deduped, fresh := make([]int, 0), make([]numRange, 0), 0
+
+	slices.SortFunc(ranges, func(a, b numRange) int {
+		return a.min - b.min
+	})
+
+	// Merge overlapping ranges into a single range
+	// NOTE: This could be implemented within part 1 to speed it up.
+	// As-is, part 2 performs better on benchmarks than part 1.
+	for i := 0; i < len(ranges)-1; i++ {
+		if slices.Contains(removed, i) {
+			continue
+		}
+		r1 := &ranges[i]
+		for j := i + 1; j < len(ranges); j++ {
+			r2 := &ranges[j]
+			if r1.max >= r2.min {
+				r1.max = max(r1.max, r2.max)
+				removed = append(removed, j)
+			}
+		}
+		deduped = append(deduped, *r1)
+	}
+
+	// Count total number of fresh ingredient IDs
+	for _, r := range deduped {
+		fresh += r.max - r.min + 1
 	}
 
 	return fresh

@@ -7,7 +7,7 @@ import (
 )
 
 type calculation struct {
-	nums []int
+	nums []string
 	op   string
 }
 
@@ -23,8 +23,9 @@ func d6p1(input string) int {
 	sum := 0
 
 	for _, c := range calcs {
-		s := c.nums[0]
-		for _, n := range c.nums[1:] {
+		s, _ := strconv.Atoi(strings.Trim(c.nums[0], " "))
+		for _, num := range c.nums[1:] {
+			n, _ := strconv.Atoi(strings.Trim(num, " "))
 			if c.op == "+" {
 				s += n
 			} else if c.op == "*" {
@@ -39,29 +40,31 @@ func d6p1(input string) int {
 
 func parseHomework(input string) []calculation {
 	rows := strings.Split(input, "\n")
-	digits := regexp.MustCompile(`\d+`)
 
-	// Allocate memory for the number of calculations (horizontal)
-	// and the number of digits in the calculations (vertical)
-	n := len(digits.FindAllString(rows[0], -1))
-	calcs := make([]calculation, n)
+	// Starting indices of each unique calculation
+	ops := regexp.MustCompile(`[+*]`)
+	starts := ops.FindAllStringIndex(rows[len(rows)-1], -1)
+
+	// Allocate memory for all calculations based on the number
+	// number of operators (calculations) and rows (operands)
+	calcs := make([]calculation, len(starts))
 	for i := range calcs {
-		calcs[i].nums = make([]int, len(rows)-1)
+		calcs[i].nums = make([]string, len(rows)-1)
 	}
 
-	// Build the calculations by removing all repeating spaces,
-	// and inserting them into the calculations by rotating the 2D array.
-	spaces := regexp.MustCompile(`[ ]+`)
-	for i, r := range rows {
-		r = spaces.ReplaceAllString(strings.Trim(r, " "), " ")
-		p := strings.Split(r, " ")
-		for j, d := range p {
-			if i == len(rows)-1 {
-				calcs[j].op = d
-			} else {
-				num, _ := strconv.Atoi(d)
-				calcs[j].nums[i] = num
+	// Extract all the operators for each calculation
+	for i, s := range starts {
+		calcs[i].op = rows[len(rows)-1][s[0]:s[1]]
+	}
+
+	// Extract all the operands for each calculation
+	for i, r := range rows[:len(rows)-1] {
+		for j := range starts {
+			s, e := starts[j][0], len(r)
+			if j < len(starts)-1 {
+				e = starts[j+1][0] - 1
 			}
+			calcs[j].nums[i] = r[s:e]
 		}
 	}
 

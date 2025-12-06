@@ -14,7 +14,7 @@ type calculation struct {
 // Day 6: Trash Compactor
 // https://adventofcode.com/2025/day/6
 func daySix(input string) (int, int) {
-	return d6p1(input), 0
+	return d6p1(input), d6p2(input)
 }
 
 // Completes the first half of the puzzle for day 6.
@@ -38,6 +38,42 @@ func d6p1(input string) int {
 	return sum
 }
 
+// Completes the second half of the puzzle for day 6.
+func d6p2(input string) int {
+	calcs := parseHomework(input)
+	sum := 0
+
+	for _, c := range calcs {
+		// Convert the numbers from vertical form to integer form
+		nums := make([]int, len(c.nums[0]))
+		for _, num := range c.nums {
+			j := 0
+			for len(num) != 0 {
+				if num[:1] != " " {
+					n, _ := strconv.Atoi(strings.Trim(num[:1], " "))
+					nums[j] = nums[j]*10 + n
+				}
+				num = num[1:]
+				j++
+			}
+		}
+
+		// Perform the resulting calculation
+		s := nums[0]
+		for _, n := range nums[1:] {
+			if c.op == "+" {
+				s += n
+			} else if c.op == "*" {
+				s *= n
+			}
+		}
+		sum += s
+	}
+
+	return sum
+}
+
+// Parses the input data into structured data.
 func parseHomework(input string) []calculation {
 	rows := strings.Split(input, "\n")
 

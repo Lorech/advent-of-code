@@ -34,3 +34,33 @@ func BenchmarkDaySevenPartOne(b *testing.B) {
 		d7p1(input)
 	}
 }
+
+// Tests the second part of the puzzle for day 7
+func TestDaySevenPartTwo(t *testing.T) {
+	input, err := file.ReadTestFile(2025, 7)
+
+	if err != nil {
+		t.Errorf("Could not read test file: %v", err)
+		return
+	}
+
+	e := 40
+	if r := d7p2(input); e != r {
+		t.Errorf("d7p2() = %v, expected %v", r, e)
+	}
+}
+
+// Benchmarks the second part of the puzzle for day 7.
+func BenchmarkDaySevenPartTwo(b *testing.B) {
+	input, err := file.ReadInfile(2025, 7)
+
+	if err != nil {
+		b.Errorf("Could not read file: %v", err)
+		return
+	}
+
+	b.ResetTimer()
+	for range b.N {
+		d7p2(input)
+	}
+}

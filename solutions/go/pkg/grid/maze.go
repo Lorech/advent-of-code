@@ -4,7 +4,7 @@ package grid
 // nodes, chained all the way to the top, will form the shortest path to reach
 // the end. A second return value is provided as an indicator if the end was
 // actually reached.
-func NavigateMaze(maze [][]rune, start Coordinates, end Coordinates) (Tile, bool) {
+func NavigateMaze(maze [][]rune, start Coordinate, end Coordinate) (Tile, bool) {
 	q := make([]Tile, 0)
 	v := make([][]bool, len(maze))
 	for i := range v {
@@ -33,7 +33,7 @@ func NavigateMaze(maze [][]rune, start Coordinates, end Coordinates) (Tile, bool
 			if ny >= 0 && ny < len(maze) && nx >= 0 && nx < len(maze[0]) && !v[ny][nx] && maze[ny][nx] != '#' {
 				v[ny][nx] = true
 				q = append(q, Tile{
-					Position: Coordinates{X: nx, Y: ny},
+					Position: Coordinate{X: nx, Y: ny},
 					Value:    maze[ny][nx],
 					Parent:   &t,
 				})

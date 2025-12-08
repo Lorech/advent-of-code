@@ -83,7 +83,7 @@ func d15p2(input string) int {
 		yd, xd := move.Velocity()
 		stack := make([]grid.Tile, 1)
 		stack[0] = grid.Tile{
-			Position: grid.Coordinates{
+			Position: grid.Coordinate{
 				X: guard[1],
 				Y: guard[0],
 			},
@@ -114,14 +114,14 @@ func d15p2(input string) int {
 			case '[':
 				// Left half of an object - we will need to check if it can be moved.
 				stack = append(stack, grid.Tile{
-					Position: grid.Coordinates{
+					Position: grid.Coordinate{
 						X: x,
 						Y: y,
 					},
 					Value: '[',
 				})
 				stack = append(stack, grid.Tile{
-					Position: grid.Coordinates{
+					Position: grid.Coordinate{
 						X: x + 1,
 						Y: y,
 					},
@@ -130,14 +130,14 @@ func d15p2(input string) int {
 			case ']':
 				// Right half of an object - we will need to check if it can be moved.
 				stack = append(stack, grid.Tile{
-					Position: grid.Coordinates{
+					Position: grid.Coordinate{
 						X: x,
 						Y: y,
 					},
 					Value: ']',
 				})
 				stack = append(stack, grid.Tile{
-					Position: grid.Coordinates{
+					Position: grid.Coordinate{
 						X: x - 1,
 						Y: y,
 					},

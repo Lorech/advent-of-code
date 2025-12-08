@@ -9,15 +9,15 @@ import (
 )
 
 type tile struct {
-	position  grid.Coordinates   // The location of the tile.
-	direction grid.Direction     // The direction faced when traversing the tile.
-	cost      int                // The cost to get to this tile; priority within the queue.
-	path      []grid.Coordinates // The path leading up to the tile.
-	index     int                // The index within the heap.
+	position  grid.Coordinate   // The location of the tile.
+	direction grid.Direction    // The direction faced when traversing the tile.
+	cost      int               // The cost to get to this tile; priority within the queue.
+	path      []grid.Coordinate // The path leading up to the tile.
+	index     int               // The index within the heap.
 }
 
 type state struct {
-	position  grid.Coordinates
+	position  grid.Coordinate
 	direction grid.Direction
 }
 
@@ -56,7 +56,7 @@ func (pq *priorityQueue) Pop() any {
 }
 
 // Updates a tile within the priority queue.
-func (pq *priorityQueue) update(n *tile, position grid.Coordinates, direction grid.Direction, cost int) {
+func (pq *priorityQueue) update(n *tile, position grid.Coordinate, direction grid.Direction, cost int) {
 	n.position = position
 	n.direction = direction
 	n.cost = cost
@@ -80,7 +80,7 @@ func d16p1(input string) int {
 func d16p2(input string) int {
 	maze, start, end := parseMaze(input)
 	_, paths := navigate(maze, start, end)
-	seats := make([]grid.Coordinates, 0)
+	seats := make([]grid.Coordinate, 0)
 	for _, path := range paths {
 		for _, p := range path {
 			if !slices.Contains(seats, p) {
@@ -94,17 +94,17 @@ func d16p2(input string) int {
 // Navigates the maze using Dijkstra's algorithm, returning the cheapest path
 // from the start tile to the end tile, and a slice of coordinates representing
 // the obtained path. Returns -1 and nil if no path is found.
-func navigate(maze [][]rune, start [2]int, end [2]int) (int, [][]grid.Coordinates) {
+func navigate(maze [][]rune, start [2]int, end [2]int) (int, [][]grid.Coordinate) {
 	dirs := [4]grid.Direction{grid.Up, grid.Down, grid.Left, grid.Right}
 	pq := priorityQueue{
 		&tile{
-			position: grid.Coordinates{
+			position: grid.Coordinate{
 				X: start[1],
 				Y: start[0],
 			},
 			direction: grid.Right,
 			cost:      0,
-			path: []grid.Coordinates{
+			path: []grid.Coordinate{
 				{
 					X: start[1],
 					Y: start[0],
@@ -115,7 +115,7 @@ func navigate(maze [][]rune, start [2]int, end [2]int) (int, [][]grid.Coordinate
 	heap.Init(&pq)
 
 	visited := make(map[state]int, len(maze)) // Visited tiles with their respective costs.
-	var paths [][]grid.Coordinates            // Paths leading to the end of the maze.
+	var paths [][]grid.Coordinate             // Paths leading to the end of the maze.
 	minCost := math.MaxInt
 
 	for pq.Len() > 0 {
@@ -132,7 +132,7 @@ func navigate(maze [][]rune, start [2]int, end [2]int) (int, [][]grid.Coordinate
 		// Check if we reached the end, at which point we can return!
 		if coords.X == end[1] && coords.Y == end[0] {
 			if cost < minCost {
-				paths = [][]grid.Coordinates{path}
+				paths = [][]grid.Coordinate{path}
 				minCost = cost
 			} else if cost == minCost {
 				paths = append(paths, path)
@@ -143,7 +143,7 @@ func navigate(maze [][]rune, start [2]int, end [2]int) (int, [][]grid.Coordinate
 		for _, dir := range dirs {
 			yd, xd := dir.Velocity()
 			y, x := coords.Y+yd, coords.X+xd
-			newCoords := grid.Coordinates{X: x, Y: y}
+			newCoords := grid.Coordinate{X: x, Y: y}
 
 			if maze[y][x] == '#' {
 				continue
@@ -166,7 +166,7 @@ func navigate(maze [][]rune, start [2]int, end [2]int) (int, [][]grid.Coordinate
 
 			// Add to queue if not visited before or if it's cheaper this time around.
 			if prevCost, found := visited[st]; !found || newCost < prevCost {
-				p := make([]grid.Coordinates, len(path)+1)
+				p := make([]grid.Coordinate, len(path)+1)
 				copy(p, path)
 				p[len(path)] = newCoords
 				heap.Push(&pq, &tile{

@@ -34,10 +34,10 @@ func d18p1(input string, options ...int) int {
 
 	obstacles := parseObstacles(input)
 	maze := createMaze(w, h, obstacles[:n])
-	s, e := grid.Coordinates{X: 0, Y: 0}, grid.Coordinates{X: w - 1, Y: h - 1}
+	s, e := grid.Coordinate{X: 0, Y: 0}, grid.Coordinate{X: w - 1, Y: h - 1}
 
 	end, _ := grid.NavigateMaze(maze, s, e)
-	path := make([]grid.Coordinates, 0)
+	path := make([]grid.Coordinate, 0)
 	for end.Parent != nil {
 		path = append(path, end.Position)
 		end = *end.Parent
@@ -61,7 +61,7 @@ func d18p2(input string, options ...int) string {
 		h = options[1]
 	}
 
-	s, e := grid.Coordinates{X: 0, Y: 0}, grid.Coordinates{X: w - 1, Y: h - 1}
+	s, e := grid.Coordinate{X: 0, Y: 0}, grid.Coordinate{X: w - 1, Y: h - 1}
 	obstacles := parseObstacles(input)
 	left, right := 0, len(obstacles)-1
 	middle := int(math.Floor(float64((left + right) / 2)))

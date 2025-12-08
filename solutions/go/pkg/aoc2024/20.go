@@ -62,12 +62,12 @@ func d20p2(input string, options ...int) int {
 
 	maze, start, end := parseTrack(input)
 	e, _ := grid.NavigateMaze(maze, start, end)
-	path := make([]grid.Coordinates, 0)
+	path := make([]grid.Coordinate, 0)
 	for e.Parent != nil {
-		path = append([]grid.Coordinates{e.Position}, path...)
+		path = append([]grid.Coordinate{e.Position}, path...)
 		e = *e.Parent
 	}
-	path = append([]grid.Coordinates{e.Position}, path...) // Add the start node to the path.
+	path = append([]grid.Coordinate{e.Position}, path...) // Add the start node to the path.
 
 	savings := 0
 	for i, a := range path[:len(path)-threshold] {
@@ -88,20 +88,20 @@ func d20p2(input string, options ...int) int {
 //   - The maze itself;
 //   - The coordinates of the original starting position;
 //   - The coordinates of the original ending position.
-func parseTrack(input string) ([][]rune, grid.Coordinates, grid.Coordinates) {
+func parseTrack(input string) ([][]rune, grid.Coordinate, grid.Coordinate) {
 	rows := strings.Split(input, "\n")
 	maze := make([][]rune, len(rows))
-	var start, end grid.Coordinates
+	var start, end grid.Coordinate
 
 	for y, row := range rows {
 		maze[y] = make([]rune, len(row))
 		for x, tile := range row {
 			switch tile {
 			case 'S':
-				start = grid.Coordinates{X: x, Y: y}
+				start = grid.Coordinate{X: x, Y: y}
 				maze[y][x] = '.'
 			case 'E':
-				end = grid.Coordinates{X: x, Y: y}
+				end = grid.Coordinate{X: x, Y: y}
 				maze[y][x] = '.'
 			case '#':
 				maze[y][x] = '#'

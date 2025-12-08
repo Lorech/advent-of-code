@@ -9,23 +9,23 @@ import (
 )
 
 type keypad struct {
-	keys     map[rune]grid.Coordinates // A mapping of keypad characters to their coordinates in the grid.
-	position grid.Coordinates          // The position within the grid that is currently active.
-	focus    rune                      // The currently focused character on the keypad based on position.
-	cache    map[[2]rune]int           // Memoized storage for number of moves to get from the first rune to the second rune.
+	keys     map[rune]grid.Coordinate // A mapping of keypad characters to their coordinates in the grid.
+	position grid.Coordinate          // The position within the grid that is currently active.
+	focus    rune                     // The currently focused character on the keypad based on position.
+	cache    map[[2]rune]int          // Memoized storage for number of moves to get from the first rune to the second rune.
 }
 
 // Initializes a new instance of a numpad-like keypad.
 func newNumpad() keypad {
 	var k keypad
 	k.cache = make(map[[2]rune]int, 0)
-	k.keys = map[rune]grid.Coordinates{
-		'7': grid.Coordinates{X: 0, Y: 0}, '8': grid.Coordinates{X: 1, Y: 0}, '9': grid.Coordinates{X: 2, Y: 0},
-		'4': grid.Coordinates{X: 0, Y: 1}, '5': grid.Coordinates{X: 1, Y: 1}, '6': grid.Coordinates{X: 2, Y: 1},
-		'1': grid.Coordinates{X: 0, Y: 2}, '2': grid.Coordinates{X: 1, Y: 2}, '3': grid.Coordinates{X: 2, Y: 2},
-		' ': grid.Coordinates{X: 0, Y: 3}, '0': grid.Coordinates{X: 1, Y: 3}, 'A': grid.Coordinates{X: 2, Y: 3},
+	k.keys = map[rune]grid.Coordinate{
+		'7': grid.Coordinate{X: 0, Y: 0}, '8': grid.Coordinate{X: 1, Y: 0}, '9': grid.Coordinate{X: 2, Y: 0},
+		'4': grid.Coordinate{X: 0, Y: 1}, '5': grid.Coordinate{X: 1, Y: 1}, '6': grid.Coordinate{X: 2, Y: 1},
+		'1': grid.Coordinate{X: 0, Y: 2}, '2': grid.Coordinate{X: 1, Y: 2}, '3': grid.Coordinate{X: 2, Y: 2},
+		' ': grid.Coordinate{X: 0, Y: 3}, '0': grid.Coordinate{X: 1, Y: 3}, 'A': grid.Coordinate{X: 2, Y: 3},
 	}
-	k.position = grid.Coordinates{X: 2, Y: 3}
+	k.position = grid.Coordinate{X: 2, Y: 3}
 	k.focus = 'A'
 	return k
 }
@@ -34,11 +34,11 @@ func newNumpad() keypad {
 func newDirectionPad() keypad {
 	var k keypad
 	k.cache = make(map[[2]rune]int, 0)
-	k.keys = map[rune]grid.Coordinates{
-		' ': grid.Coordinates{X: 0, Y: 0}, '^': grid.Coordinates{X: 1, Y: 0}, 'A': grid.Coordinates{X: 2, Y: 0},
-		'<': grid.Coordinates{X: 0, Y: 1}, 'v': grid.Coordinates{X: 1, Y: 1}, '>': grid.Coordinates{X: 2, Y: 1},
+	k.keys = map[rune]grid.Coordinate{
+		' ': grid.Coordinate{X: 0, Y: 0}, '^': grid.Coordinate{X: 1, Y: 0}, 'A': grid.Coordinate{X: 2, Y: 0},
+		'<': grid.Coordinate{X: 0, Y: 1}, 'v': grid.Coordinate{X: 1, Y: 1}, '>': grid.Coordinate{X: 2, Y: 1},
 	}
-	k.position = grid.Coordinates{X: 2, Y: 0}
+	k.position = grid.Coordinate{X: 2, Y: 0}
 	k.focus = 'A'
 	return k
 }

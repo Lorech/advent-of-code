@@ -1,7 +1,6 @@
 package aoc2025
 
 import (
-	"math"
 	"regexp"
 	"slices"
 	"strconv"
@@ -16,11 +15,8 @@ type machine struct {
 }
 
 type lightState struct {
-	depth    int
-	lights   int
-	visited  []int
-	parent   *lightState
-	children []lightState
+	depth  int
+	lights int
 }
 
 // Day 10: Factory
@@ -35,64 +31,32 @@ func d10p1(input string) int {
 	total := 0
 
 	for _, m := range factory {
-		min, cache := math.MaxInt, map[int]int{0: math.MaxInt}
+		s := lightState{depth: 0, lights: 0}
 
-		s := lightState{
-			depth:    0,
-			lights:   0,
-			children: make([]lightState, 0),
-			visited:  []int{0},
+		stack, visited := []lightState{s}, []int{}
+		for len(stack) != 0 {
+			s := stack[0]
+			stack = stack[1:]
+			visited = append(visited, s.lights)
+
+			if s.lights == m.lights {
+				total += s.depth
+				break
+			}
+
+			for _, b := range m.buttons {
+				next := s.lights ^ b
+				if !slices.Contains(visited, next) {
+					new := lightState{depth: s.depth + 1, lights: next}
+					if !slices.Contains(stack, new) {
+						stack = append(stack, new)
+					}
+				}
+			}
 		}
-
-		pressButtons(&s, m.buttons, m.lights, &min, &cache)
-		total += min
 	}
 
 	return total
-}
-
-// Advances a single light state by pressing buttons and queueing upcoming states.
-func pressButtons(s *lightState, bs []int, target int, min *int, cache *map[int]int) {
-	// Went too deep and can't beat current known minimum value
-	if s.depth == *min {
-		return
-	}
-
-	// Hit the cache, no point in evaluating upcoming presses
-	cached, hit := (*cache)[s.lights]
-	if hit && cached == -1 {
-		return
-	}
-
-	// Reached the target state, so propogate the move count in the cache
-	if s.lights == target {
-		*min = s.depth
-		p := s.parent
-		for p != nil {
-			(*cache)[p.lights] = s.depth
-			p = p.parent
-		}
-		return
-	}
-
-	for _, b := range bs {
-		next := s.lights ^ b
-		if !slices.Contains(s.visited, next) {
-			new := lightState{
-				depth:    s.depth + 1,
-				lights:   next,
-				visited:  append(s.visited, next),
-				parent:   s,
-				children: make([]lightState, 0),
-			}
-			s.children = append(s.children, new)
-			(*cache)[next] = math.MaxInt
-			pressButtons(&new, bs, target, min, cache)
-		} else {
-			// If a state has already been visited, it forms a loop
-			(*cache)[next] = -1
-		}
-	}
 }
 
 // Parses input data into structured data.

@@ -37,3 +37,40 @@ func TestInvalidSliceToInt(t *testing.T) {
 		t.Errorf("Stoi() = %v, expected %v", r, e)
 	}
 }
+
+func TestIntToBinRepresentation(t *testing.T) {
+	tests := []struct {
+		name string
+		num  []int
+		want int
+	}{
+		{
+			name: "consecutive bits",
+			num:  []int{0, 1, 2, 3, 4},
+			want: 0b11111,
+		},
+		{
+			name: "separated bits",
+			num:  []int{0, 4},
+			want: 0b10001,
+		},
+		{
+			name: "leading zeroes consecutive bits",
+			num:  []int{2, 3, 4},
+			want: 0b00111,
+		},
+		{
+			name: "leading zeroes separated bits",
+			num:  []int{2, 4},
+			want: 0b00101,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := IntIndexToBinary(tt.num)
+			if got != tt.want {
+				t.Errorf("IntToBinRepresentation() = %05b, want %05b", got, tt.want)
+			}
+		})
+	}
+}

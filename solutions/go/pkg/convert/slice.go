@@ -33,3 +33,15 @@ func Stoi(s []int, b ...int) (int, error) {
 	}
 	return num, nil
 }
+
+// Converts an integer slice into a single binary number with each number
+// within the slice representing an index from MSB to LSB that contains a 1.
+func IntIndexToBinary(num []int) int {
+	r, p := 0, 0
+	for _, n := range num {
+		r <<= n - p
+		r |= 0x1
+		p = n
+	}
+	return r
+}

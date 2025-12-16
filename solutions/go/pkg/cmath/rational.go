@@ -24,6 +24,9 @@ func NewRationalInteger(n int) Rational {
 // This is a strict equality check of the number's parts, meaning that an equal fraction
 // will not necessarily indicate an equal rational number.
 func (a Rational) Equal(b Rational) bool {
+	if a.Numerator == 0 && b.Numerator == 0 {
+		return true
+	}
 	return a.Numerator == b.Numerator && a.Denominator == b.Denominator
 }
 
@@ -34,6 +37,12 @@ func (a Rational) Integer() bool {
 
 // Adds two rational numbers, returning the resulting rational number.
 func (a Rational) Add(b Rational) Rational {
+	if a.Numerator == 0 || a.Denominator == 0 {
+		return b
+	} else if b.Numerator == 0 || b.Denominator == 0 {
+		return a
+	}
+
 	return NewRational(
 		a.Numerator*b.Denominator+a.Denominator*b.Numerator,
 		a.Denominator*b.Denominator,
@@ -42,6 +51,12 @@ func (a Rational) Add(b Rational) Rational {
 
 // Subtracts two rational numbers, returning the resulting rational number.
 func (a Rational) Sub(b Rational) Rational {
+	if a.Numerator == 0 || a.Denominator == 0 {
+		return NewRational(-b.Numerator, b.Denominator)
+	} else if b.Numerator == 0 || b.Denominator == 0 {
+		return a
+	}
+
 	return NewRational(
 		a.Numerator*b.Denominator-a.Denominator*b.Numerator,
 		a.Denominator*b.Denominator,

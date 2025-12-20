@@ -32,6 +32,16 @@ func (a Rational) Integer() bool {
 	return a.Denominator == 1
 }
 
+// Convert a rational number to an integer. The second result value indicates if
+// the rational number actually was a valid integer.
+func (a Rational) ToInt() (int, bool) {
+	if !a.Integer() {
+		return 0, false
+	}
+
+	return a.Numerator * a.Denominator, true
+}
+
 // Adds two rational numbers, returning the resulting rational number.
 func (a Rational) Add(b Rational) Rational {
 	return NewRational(
